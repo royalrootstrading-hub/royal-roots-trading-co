@@ -36,6 +36,7 @@ The editor supports:
 - Brand name, tagline, logo, colours, contact details, About text and search description
 - Editing, hiding/showing and reordering the main homepage sections
 - Adding, editing, hiding/showing, reordering and deleting custom content sections with optional images and buttons
+- Editing gallery tiles and advantage cards, including descriptions, icons/images, visibility and order
 - Product catalogue management through `admin.html`
 
 The website editor schema is documented in `supabase/website-cms.sql`; the live project has already had this migration applied. Major page sections are editable, while some nested prebuilt gallery/advantage tiles and embedded third-party forms/videos remain part of the static page.
