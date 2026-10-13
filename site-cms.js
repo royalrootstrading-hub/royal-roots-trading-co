@@ -14,7 +14,8 @@ for(const x of builtins)applyBuiltin(x);
 if(s?.about_text){const p=document.querySelector("#about .about-copy p");if(p)p.textContent=s.about_text}
 arrange(builtins);
 (rows||[]).filter(x=>!x.target_id&&x.visible).forEach(x=>addCustom(x));
-if(s){const details=[["Email",s.contact_email],["Phone",s.contact_phone],["WhatsApp",s.whatsapp],["Address",s.address]].filter(x=>x[1]);if(details.length){const c=document.createElement("section");c.className="rr-cms-contact";const h=document.createElement("h2");h.textContent="Contact us";c.append(h);details.forEach(([label,value])=>{const p=document.createElement("p");p.textContent=label+": "+value;c.append(p)});placeCustom(c)}}
+if(s){if(s.tagline){const t=document.querySelector(".top .container span:first-child");if(t)t.textContent=s.tagline}updateContact(s)}
+function updateContact(s){const card=document.querySelector("#contact .contact-card");if(!card)return;const map={"PHONE / WHATSAPP":s.contact_phone||s.whatsapp,"EMAIL":s.contact_email,"LOCATION":s.address};card.querySelectorAll("strong").forEach(label=>{const k=label.textContent.trim().toUpperCase();if(map[k]){const p=label.nextElementSibling;if(p&&p.tagName==="P")p.textContent=map[k]}})}
 function applyBuiltin(x){let el;try{el=document.querySelector(x.target_id)}catch{return}if(!el)return;el.hidden=!x.visible;if(!x.visible)return;
 const heading=el.querySelector(".section-head h2")||el.querySelector(".about-copy h2")||el.querySelector("h1,h2,h3");if(x.title&&heading)heading.textContent=x.title;
 const p=el.querySelector(".section-head p")||el.querySelector(".hero p")||el.querySelector(".about-copy p")||el.querySelector(".container > div p")||el.querySelector("p");if(x.body&&p)p.textContent=x.body;
