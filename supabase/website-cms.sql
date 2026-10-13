@@ -45,12 +45,13 @@ create policy "Public can read site sections" on public.site_sections
  for select to anon, authenticated using (true);
 insert into public.site_sections(target_id,title,body,sort_order,visible) values
 ('#home','Building a stronger future, together.','Quality building materials and modern construction solutions for homes, commercial spaces and industrial projects. Build with confidence. Build with Royal Roots.',0,true),
-('#products','Complete building solutions','Explore our range of walling, board, ceiling, flooring and structural solutions for modern construction requirements.',1,true),
-('#gallery','See what we supply','A quick visual guide to our main boards and panels. Ask us for sizes, thicknesses and current rates.',2,true),
-('#video','See it in action','Watch our video to learn more about boards and panels from Royal Roots Trading & Co.',3,true),
-('#about','Your trusted building material partner','Royal Roots Trading & Co. is a building material company focused on supplying quality products and practical solutions for construction, renovation, interiors and commercial projects.',4,true),
-('#advantages','Advantages that build confidence','Solutions selected with your construction goals, performance requirements and project needs in mind.',5,true),
-('.cta','Ready to build something better?','Tell us about your project and let Royal Roots help you find the right solution.',6,true),
-('#enquiry','Enquiry & quotation form','Use the full form below to tell us the product, thickness, quantity and delivery details so we can prepare an accurate quotation.',7,true),
-('#contact','Let us discuss your project','Contact Royal Roots Trading & Co. for product information, availability and project enquiries.',8,true)
+('.stats','Company statistics','',1,true),
+('#products','Complete building solutions','Explore our range of walling, board, ceiling, flooring and structural solutions for modern construction requirements.',2,true),
+('#gallery','See what we supply','A quick visual guide to our main boards and panels. Ask us for sizes, thicknesses and current rates.',3,true),
+('#video','See it in action','Watch our video to learn more about boards and panels from Royal Roots Trading & Co.',4,true),
+('#about','Your trusted building material partner','Royal Roots Trading & Co. is a building material company focused on supplying quality products and practical solutions for construction, renovation, interiors and commercial projects.',5,true),
+('#advantages','Advantages that build confidence','Solutions selected with your construction goals, performance requirements and project needs in mind.',6,true),
+('.cta','Ready to build something better?','Tell us about your project and let Royal Roots help you find the right solution.',7,true),
+('#enquiry','Enquiry & quotation form','Use the full form below to tell us the product, thickness, quantity and delivery details so we can prepare an accurate quotation.',8,true),
+('#contact','Let us discuss your project','Contact Royal Roots Trading & Co. for product information, availability and project enquiries.',9,true)
 on conflict do nothing;
