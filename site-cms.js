@@ -2,7 +2,7 @@ import{createClient}from"https://esm.sh/@supabase/supabase-js@2";
 const url=window.SUPABASE_URL,key=window.SUPABASE_ANON_KEY;
 if(url&&key){try{
 const sb=createClient(url,key);
-const [{data:s},{data:rows}]=await Promise.all([sb.from("site_settings").select("*").eq("id","main").maybeSingle(),sb.from("site_sections").select("*").order("sort_order").order("created_at")]);
+const [{data:s},{data:rows},{data:cards}]=await Promise.all([sb.from("site_settings").select("*").eq("id","main").maybeSingle(),sb.from("site_sections").select("*").order("sort_order").order("created_at"),sb.from("site_cards").select("*").order("group_key").order("sort_order")]);
 if(s){
 document.documentElement.style.setProperty("--rr-primary",s.primary_color||"#071b62");document.documentElement.style.setProperty("--rr-accent",s.accent_color||"#d4a127");
 if(s.site_title)document.title=s.site_title;
@@ -13,8 +13,9 @@ const builtins=(rows||[]).filter(x=>x.target_id);
 for(const x of builtins)applyBuiltin(x);
 if(s?.about_text){const p=document.querySelector("#about .about-copy p");if(p)p.textContent=s.about_text}
 arrange(builtins);
-(rows||[]).filter(x=>!x.target_id&&x.visible).forEach(x=>addCustom(x));
+(rows||[]).filter(x=>!x.target_id&&x.visible).forEach(x=>addCustom(x));renderCards(cards||[]);
 if(s){if(s.tagline){const t=document.querySelector(".top .container span:first-child");if(t)t.textContent=s.tagline}updateContact(s)}
+function renderCards(cards){for(const [group,selector] of [["gallery",".gallery-grid"],["features",".feature-grid"]]){const grid=document.querySelector(selector),all=cards.filter(x=>x.group_key===group);if(!grid||!all.length)continue;grid.replaceChildren();all.filter(x=>x.visible).forEach(card=>{let item;if(group==="gallery"){item=document.createElement("figure");item.className="tile";let visual;if(card.image_url){visual=document.createElement("img");visual.src=card.image_url;visual.alt=card.title||"";visual.loading="lazy";visual.style.cssText="display:block;width:100%;height:180px;object-fit:cover"}else{visual=document.createElement("div");visual.textContent=card.icon||"▦";visual.style.cssText="display:grid;place-items:center;width:100%;height:180px;background:#eef2fb;color:var(--rr-accent,#d4a127);font-size:54px"}item.append(visual);const cap=document.createElement("figcaption"),h=document.createElement("h3"),p=document.createElement("p");h.textContent=card.title||"";p.textContent=card.body||"";cap.append(h,p);item.append(cap)}else{item=document.createElement("div");item.className="feature";if(card.image_url){const im=document.createElement("img");im.src=card.image_url;im.alt=card.title||"";im.style.cssText="width:72px;height:72px;object-fit:contain";item.append(im)}else{const icon=document.createElement("div");icon.className="icon";icon.textContent=card.icon||"▦";item.append(icon)}const h=document.createElement("h3"),p=document.createElement("p");h.textContent=card.title||"";p.textContent=card.body||"";item.append(h,p)}grid.append(item)})}} 
 function updateContact(s){const card=document.querySelector("#contact .contact-card");if(!card)return;const map={"PHONE / WHATSAPP":s.contact_phone||s.whatsapp,"EMAIL":s.contact_email,"LOCATION":s.address};card.querySelectorAll("strong").forEach(label=>{const k=label.textContent.trim().toUpperCase();if(map[k]){const p=label.nextElementSibling;if(p&&p.tagName==="P")p.textContent=map[k]}})}
 function applyBuiltin(x){let el;try{el=document.querySelector(x.target_id)}catch{return}if(!el)return;el.hidden=!x.visible;if(!x.visible)return;
 const heading=el.querySelector(".section-head h2")||el.querySelector(".about-copy h2")||el.querySelector("h1,h2,h3");if(x.title&&heading)heading.textContent=x.title;
