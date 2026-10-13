@@ -4,7 +4,7 @@ if(url&&key){try{
 const sb=createClient(url,key);
 const [{data:s},{data:rows},{data:cards}]=await Promise.all([sb.from("site_settings").select("*").eq("id","main").maybeSingle(),sb.from("site_sections").select("*").order("sort_order").order("created_at"),sb.from("site_cards").select("*").order("group_key").order("sort_order")]);
 if(s){
-document.documentElement.style.setProperty("--rr-primary",s.primary_color||"#071b62");document.documentElement.style.setProperty("--rr-accent",s.accent_color||"#d4a127");
+document.documentElement.style.setProperty("--rr-primary",s.primary_color||"#071b62");document.documentElement.style.setProperty("--rr-accent",s.accent_color||"#d4a127");document.documentElement.style.setProperty("--navy",s.primary_color||"#071b62");document.documentElement.style.setProperty("--blue",s.primary_color||"#12358e");document.documentElement.style.setProperty("--gold",s.accent_color||"#d4a127");
 if(s.site_title)document.title=s.site_title;
 if(s.meta_description){let m=document.querySelector('meta[name="description"]');if(!m){m=document.createElement("meta");m.name="description";document.head.append(m)}m.content=s.meta_description}
 document.querySelectorAll("header .brand,.navbar-brand,.logo").forEach(el=>{if(s.logo_url){const im=document.createElement("img");im.src=s.logo_url;im.alt=s.site_title||"Logo";im.style.cssText="max-height:64px;max-width:220px;object-fit:contain";el.replaceChildren(im)}else if(s.site_title&&el.textContent.trim().toLowerCase().includes("royal roots")){const small=el.querySelector("small");el.textContent=s.site_title;if(small)el.append(small)}});
