@@ -14,8 +14,27 @@ for(const x of builtins)applyBuiltin(x);
 if(s?.about_text){const p=document.querySelector("#about .about-copy p");if(p)p.textContent=s.about_text}
 arrange(builtins);
 (rows||[]).filter(x=>!x.target_id&&x.visible).forEach(x=>addCustom(x));renderCards(cards||[]);
-if(s){if(s.tagline){const t=document.querySelector(".top .container span:first-child");if(t)t.textContent=s.tagline}updateContact(s)}
+if(s){applyGlobalSettings(s);updateContact(s)}
 function renderCards(cards){for(const [group,selector] of [["gallery",".gallery-grid"],["features",".feature-grid"]]){const grid=document.querySelector(selector),all=cards.filter(x=>x.group_key===group);if(!grid||!all.length)continue;grid.replaceChildren();all.filter(x=>x.visible).forEach(card=>{let item;if(group==="gallery"){item=document.createElement("figure");item.className="tile";let visual;if(card.image_url){visual=document.createElement("img");visual.src=card.image_url;visual.alt=card.title||"";visual.loading="lazy";visual.style.cssText="display:block;width:100%;height:180px;object-fit:cover"}else{visual=document.createElement("div");visual.textContent=card.icon||"▦";visual.style.cssText="display:grid;place-items:center;width:100%;height:180px;background:#eef2fb;color:var(--rr-accent,#d4a127);font-size:54px"}item.append(visual);const cap=document.createElement("figcaption"),h=document.createElement("h3"),p=document.createElement("p");h.textContent=card.title||"";p.textContent=card.body||"";cap.append(h,p);item.append(cap)}else{item=document.createElement("div");item.className="feature";if(card.image_url){const im=document.createElement("img");im.src=card.image_url;im.alt=card.title||"";im.style.cssText="width:72px;height:72px;object-fit:contain";item.append(im)}else{const icon=document.createElement("div");icon.className="icon";icon.textContent=card.icon||"▦";item.append(icon)}const h=document.createElement("h3"),p=document.createElement("p");h.textContent=card.title||"";p.textContent=card.body||"";item.append(h,p)}grid.append(item)})}} 
+
+function applyGlobalSettings(s){
+ const top=document.querySelector(".top .container span:first-child");
+ if(top&&(s.announcement_text||s.tagline))top.textContent=s.announcement_text||s.tagline;
+ const hero=document.querySelector("#home .hero")||document.querySelector(".hero")||document.querySelector("#home");
+ if(hero){
+  const h=hero.querySelector("h1")||document.querySelector("#home h1");
+  if(s.hero_title&&h)h.textContent=s.hero_title;
+  const p=hero.querySelector("p")||document.querySelector("#home p");
+  if(s.hero_body&&p)p.textContent=s.hero_body;
+  const a=hero.querySelector(".actions a")||hero.querySelector("a.btn")||hero.querySelector("a");
+  if(a){if(s.hero_button_text)a.textContent=s.hero_button_text;if(s.hero_button_url)a.href=s.hero_button_url}
+  if(s.hero_image_url){let image=hero.querySelector("img");if(image){image.src=s.hero_image_url;image.alt=s.hero_title||s.site_title||"Royal Roots"}else{hero.style.backgroundImage="linear-gradient(90deg,rgba(5,15,48,.68),rgba(5,15,48,.12)),url("+JSON.stringify(s.hero_image_url)+")";hero.style.backgroundSize="cover";hero.style.backgroundPosition="center"}}
+ }
+ const navMap=[["#products",s.nav_products_label],["#about",s.nav_about_label],["#gallery",s.nav_gallery_label],["#contact",s.nav_contact_label]];
+ for(const [href,label] of navMap){if(!label)continue;document.querySelectorAll('header a[href="'+href+'"],nav a[href="'+href+'"]').forEach(a=>{a.textContent=label})}
+ if(s.footer_text){let footer=document.querySelector("footer");if(footer){let p=footer.querySelector("#rr-footer-text");if(!p){p=document.createElement("p");p.id="rr-footer-text";footer.append(p)}p.textContent=s.footer_text}}
+}
+
 function updateContact(s){const card=document.querySelector("#contact .contact-card");if(!card)return;const map={"PHONE / WHATSAPP":s.contact_phone||s.whatsapp,"EMAIL":s.contact_email,"LOCATION":s.address};card.querySelectorAll("strong").forEach(label=>{const k=label.textContent.trim().toUpperCase();if(map[k]){const p=label.nextElementSibling;if(p&&p.tagName==="P")p.textContent=map[k]}})}
 function applyBuiltin(x){let el;try{el=document.querySelector(x.target_id)}catch{return}if(!el)return;el.hidden=!x.visible;if(!x.visible)return;
 const heading=el.querySelector(".section-head h2")||el.querySelector(".about-copy h2")||el.querySelector("h1,h2,h3");if(x.title&&heading)heading.textContent=x.title;
