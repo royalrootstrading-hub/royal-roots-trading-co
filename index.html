@@ -16,7 +16,7 @@
    if(!response.ok) throw new Error('Website content could not be loaded.');
    let html=await response.text();
    const endTag="</scr"+"ipt>";
-   const additions='\n<script src="./supabase-config.js">'+endTag+'\n<script type="module" src="./products.js">'+endTag+'\n<script type="module" src="./site-cms.js">'+endTag+'\n';
+   const additions='\n<script src="./supabase-config.js">'+endTag+'\n<script type="module" src="./products.js">'+endTag+'\n<script type="module" src="./site-cms.js">'+endTag+'\n<script type="module" src="./site-videos-public.js">'+endTag+'\n';
    html=html.replace(new RegExp("</body>","i"), additions+"</body>");
    document.open(); document.write(html); document.close();
  } catch(e) {
