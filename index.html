@@ -3,19 +3,47 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Royal Roots Trading & Co. — building materials and construction solutions.">
-<meta http-equiv="refresh" content="0;url=./legacy-site.html">
+<meta name="description" content="Royal Roots Trading &amp; Co. — building materials and construction solutions.">
+<meta name="theme-color" content="#071b62">
 <title>Royal Roots Trading &amp; Co.</title>
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;font:16px/1.5 Arial,sans-serif;text-align:center;color:#071b62;background:#fff}a{color:#12358e}
 </style>
 </head>
 <body>
-<main>
+<main id="rr-loading">
 <h1>ROYAL ROOTS TRADING &amp; CO.</h1>
-<p>Opening the mobile-friendly website…</p>
-<p><a href="./legacy-site.html">Tap here if the website does not open automatically</a></p>
+<p>Opening the website…</p>
+<p>If the website does not open, <a href="./legacy-site.html">open the website directly</a>.</p>
 </main>
-<script>location.replace("./legacy-site.html");</script>
+<script>
+(async function(){
+  try {
+    const response = await fetch("./legacy-site.html?content-refresh=20261019", {cache:"no-store"});
+    if (!response.ok) throw new Error("Website content could not be loaded (" + response.status + ").");
+    let html = await response.text();
+    const scripts = [];
+    if (!/supabase-config\.js(?:[?"'])/i.test(html)) scripts.push('<script src="./supabase-config.js?v=20261019"><\/script>');
+    if (!/site-cms\.js(?:[?"'])/i.test(html)) scripts.push('<script type="module" src="./site-cms.js?v=20261019"><\/script>');
+    if (!/site-videos-public\.js(?:[?"'])/i.test(html)) scripts.push('<script type="module" src="./site-videos-public.js?v=20261019"><\/script>');
+    if (scripts.length) {
+      const additions = scripts.join("\n");
+      if (/<\/body\s*>/i.test(html)) html = html.replace(/<\/body\s*>/i, additions + "\n</body>");
+      else html += additions;
+    }
+    document.open();
+    document.write(html);
+    document.close();
+  } catch (error) {
+    const main = document.getElementById("rr-loading");
+    if (main) {
+      const p = document.createElement("p");
+      p.textContent = "The website could not load automatically. Please use the direct link below or refresh in a moment.";
+      main.append(p);
+      console.error("Royal Roots website loader:", error);
+    }
+  }
+})();
+</script>
 </body>
 </html>
