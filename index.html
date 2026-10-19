@@ -25,6 +25,7 @@
 #rr-social-tabs a:hover{transform:translateY(-2px);opacity:.92}
 #rr-social-tabs .rr-instagram{background:linear-gradient(45deg,#feda75,#d62976,#962fbf,#4f5bd5)}
 #rr-social-tabs .rr-youtube{background:#c00}
+#rr-social-tabs .rr-whatsapp{background:#25D366}
 #rr-social-tabs svg{width:18px;height:18px;fill:currentColor}
 @media(max-width:480px){#rr-social-tabs{right:10px;bottom:10px;gap:7px}#rr-social-tabs a{padding:11px 12px;font-size:13px}}
 </style>
@@ -35,6 +36,8 @@ Instagram</a>
 <a class="rr-youtube" href="https://youtube.com/@royalrootstradingco" target="_blank" rel="noopener noreferrer" aria-label="Open Royal Roots Trading and Co. YouTube channel">
 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
 YouTube</a>
+<a class="rr-whatsapp" href="https://wa.me/917799187189" target="_blank" rel="noopener noreferrer" aria-label="Chat with Royal Roots on WhatsApp number one">WhatsApp 1</a>
+<a class="rr-whatsapp" href="https://wa.me/918688475976" target="_blank" rel="noopener noreferrer" aria-label="Chat with Royal Roots on WhatsApp number two">WhatsApp 2</a>
 </nav>`;
    html=html.replace(new RegExp("</body>","i"), socialTabs+"</body>");
    document.open(); document.write(html); document.close();
