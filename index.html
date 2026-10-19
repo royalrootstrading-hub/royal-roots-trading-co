@@ -20,16 +20,17 @@
    html=html.replace(new RegExp("</body>","i"), additions+"</body>");
    const socialTabs = `
 <style>
-#rr-social-tabs{position:fixed;right:18px;bottom:18px;z-index:2147483000;display:flex;gap:10px;align-items:center;font:600 14px/1.2 Arial,sans-serif}
+#rr-social-tabs{position:fixed;right:18px;bottom:18px;z-index:2147483000;display:flex;flex-direction:row;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end;max-width:calc(100vw - 36px);font:600 14px/1.2 Arial,sans-serif}
 #rr-social-tabs a{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:999px;color:#fff;text-decoration:none;box-shadow:0 4px 16px #0003;transition:transform .15s,opacity .15s}
 #rr-social-tabs a:hover{transform:translateY(-2px);opacity:.92}
 #rr-social-tabs .rr-instagram{background:linear-gradient(45deg,#feda75,#d62976,#962fbf,#4f5bd5)}
 #rr-social-tabs .rr-youtube{background:#c00}
 #rr-social-tabs .rr-whatsapp{background:#25D366}
 #rr-social-tabs svg{width:18px;height:18px;fill:currentColor}
-@media(max-width:480px){#rr-social-tabs{right:10px;bottom:10px;gap:7px}#rr-social-tabs a{padding:11px 12px;font-size:13px}}
+@media(max-width:600px){#rr-social-tabs{right:10px;bottom:10px;gap:7px;flex-direction:column;align-items:flex-end;max-width:calc(100vw - 20px)}#rr-social-tabs .rr-social-toggle{display:inline-flex}#rr-social-tabs a{display:none;padding:10px 12px;font-size:13px;max-width:calc(100vw - 40px)}#rr-social-tabs.rr-open a{display:inline-flex}}
 </style>
 <nav id="rr-social-tabs" aria-label="Follow Royal Roots on social media">
+<button type="button" class="rr-social-toggle" aria-expanded="false" aria-controls="rr-social-tabs" style="display:none;border:0;border-radius:999px;background:#071b62;color:#fff;padding:12px 16px;font:600 14px Arial,sans-serif;box-shadow:0 4px 16px #0003;cursor:pointer">Follow us +</button>
 <a class="rr-instagram" href="https://www.instagram.com/royalroots_trading/" target="_blank" rel="noopener noreferrer" aria-label="Open Royal Roots on Instagram">
 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2.2A2.8 2.8 0 0 0 4.2 7v10A2.8 2.8 0 0 0 7 19.8h10a2.8 2.8 0 0 0 2.8-2.8V7A2.8 2.8 0 0 0 17 4.2H7zm5 2.3a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 2.2a3.3 3.3 0 1 0 0 6.6 3.3 3.3 0 0 0 0-6.6zm5.7-3.1a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg>
 Instagram</a>
@@ -38,9 +39,10 @@ Instagram</a>
 YouTube</a>
 <a class="rr-whatsapp" href="https://wa.me/917799187189" target="_blank" rel="noopener noreferrer" aria-label="Chat with Royal Roots on WhatsApp number one">WhatsApp 1</a>
 <a class="rr-whatsapp" href="https://wa.me/918688475976" target="_blank" rel="noopener noreferrer" aria-label="Chat with Royal Roots on WhatsApp number two">WhatsApp 2</a>
-</nav>`;
+</nav>`
    html=html.replace(new RegExp("</body>","i"), socialTabs+"</body>");
-   document.open(); document.write(html); document.close();
+   const socialScript = '<script>(function(){var n=document.getElementById("rr-social-tabs");if(!n)return;var b=n.querySelector(".rr-social-toggle");if(!b)return;function sync(){var mobile=window.matchMedia("(max-width:600px)").matches;b.style.display=mobile?"inline-flex":"none";if(!mobile){n.classList.remove("rr-open");b.setAttribute("aria-expanded","false");b.textContent="Follow us +";}}b.addEventListener("click",function(){var open=n.classList.toggle("rr-open");b.setAttribute("aria-expanded",String(open));b.textContent=open?"Close social links −":"Follow us +";});window.addEventListener("resize",sync);sync();})();<\/script>';
+   html=html.replace(new RegExp("</body>","i"),socialScript+"</body>");document.open(); document.write(html); document.close();
  } catch(e) {
    status.textContent='The website could not load right now.';
    const link=document.createElement('a');link.href='./legacy-site.html';link.textContent='Open the original website';
