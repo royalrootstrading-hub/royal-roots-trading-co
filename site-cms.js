@@ -15,6 +15,30 @@ if(s?.about_text){const p=document.querySelector("#about .about-copy p");if(p)p.
 arrange(builtins);
 (rows||[]).filter(x=>!x.target_id&&x.visible).forEach(x=>addCustom(x));renderCards(cards||[]);
 if(s){applyGlobalSettings(s);updateContact(s)}
+await renderPublishedProducts(sb);
+async function renderPublishedProducts(client){
+ try{
+  const {data:products,error}=await client.from("products").select("id,name,category,description,image_urls").eq("published",true).order("created_at",{ascending:false});
+  if(error)throw error;
+  const section=document.querySelector("#products");if(!section)return;
+  let root=document.querySelector("#rr-live-products");
+  if(!root){root=document.createElement("div");root.id="rr-live-products";root.setAttribute("aria-label","Published products");section.append(root)}
+  root.replaceChildren();
+  if(!products?.length){root.hidden=true;return}root.hidden=false;
+  const heading=document.createElement("h2");heading.textContent="Our Products";root.append(heading);
+  const grid=document.createElement("div");grid.className="rr-live-products-grid";
+  for(const p of products){const card=document.createElement("article");card.className="rr-live-product-card";
+   if(p.image_urls?.[0]){const im=document.createElement("img");im.src=p.image_urls[0];im.alt=p.name||"Product";im.loading="lazy";card.append(im)}
+   const body=document.createElement("div");body.className="rr-live-product-body";
+   const h=document.createElement("h3");h.textContent=p.name||"Product";body.append(h);
+   if(p.category){const category=document.createElement("p");category.className="rr-live-product-category";category.textContent=p.category;body.append(category)}
+   if(p.description){const desc=document.createElement("p");desc.textContent=p.description;body.append(desc)}
+   card.append(body);grid.append(card)
+  }
+  root.append(grid);
+  if(!document.querySelector("#rr-live-products-style")){const style=document.createElement("style");style.id="rr-live-products-style";style.textContent="#rr-live-products{width:100%;padding:24px 0}#rr-live-products>h2{text-align:center;margin:12px 0 24px;color:var(--rr-primary,#071b62)}.rr-live-products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px;width:min(1200px,100%);margin:0 auto;padding:0 16px;box-sizing:border-box}.rr-live-product-card{overflow:hidden;border:1px solid #e2e7f0;border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(7,27,98,.08)}.rr-live-product-card>img{display:block;width:100%;height:200px;object-fit:cover;background:#f4f6fa}.rr-live-product-body{padding:16px}.rr-live-product-body h3{margin:0 0 8px;color:var(--rr-primary,#071b62)}.rr-live-product-body p{line-height:1.6;white-space:pre-line}.rr-live-product-category{font-size:.9em;font-weight:600;color:var(--rr-accent,#d4a127)}";document.head.append(style)}
+ }catch(error){console.warn("Published products could not be loaded",error)}
+}
 function renderCards(cards){for(const [group,selector] of [["gallery",".gallery-grid"],["features",".feature-grid"]]){const grid=document.querySelector(selector),all=cards.filter(x=>x.group_key===group);if(!grid||!all.length)continue;grid.replaceChildren();all.filter(x=>x.visible).forEach(card=>{let item;if(group==="gallery"){item=document.createElement("figure");item.className="tile";let visual;if(card.image_url){visual=document.createElement("img");visual.src=card.image_url;visual.alt=card.title||"";visual.loading="lazy";visual.style.cssText="display:block;width:100%;height:180px;object-fit:cover"}else{visual=document.createElement("div");visual.textContent=card.icon||"▦";visual.style.cssText="display:grid;place-items:center;width:100%;height:180px;background:#eef2fb;color:var(--rr-accent,#d4a127);font-size:54px"}item.append(visual);const cap=document.createElement("figcaption"),h=document.createElement("h3"),p=document.createElement("p");h.textContent=card.title||"";p.textContent=card.body||"";cap.append(h,p);item.append(cap)}else{item=document.createElement("div");item.className="feature";if(card.image_url){const im=document.createElement("img");im.src=card.image_url;im.alt=card.title||"";im.style.cssText="width:72px;height:72px;object-fit:contain";item.append(im)}else{const icon=document.createElement("div");icon.className="icon";icon.textContent=card.icon||"▦";item.append(icon)}const h=document.createElement("h3"),p=document.createElement("p");h.textContent=card.title||"";p.textContent=card.body||"";item.append(h,p)}grid.append(item)})}} 
 
 function applyGlobalSettings(s){
