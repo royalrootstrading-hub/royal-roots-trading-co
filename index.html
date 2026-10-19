@@ -22,10 +22,15 @@
     const response = await fetch("./legacy-site.html?content-refresh=20261019", {cache:"no-store"});
     if (!response.ok) throw new Error("Website content could not be loaded (" + response.status + ").");
     let html = await response.text();
-    const scripts = [];
-    if (!/supabase-config\.js(?:[?"'])/i.test(html)) scripts.push('<script src="./supabase-config.js?v=20261019"><\/script>');
-    if (!/site-cms\.js(?:[?"'])/i.test(html)) scripts.push('<script type="module" src="./site-cms.js?v=20261019"><\/script>');
-    if (!/site-videos-public\.js(?:[?"'])/i.test(html)) scripts.push('<script type="module" src="./site-videos-public.js?v=20261019"><\/script>');
+    // Remove older CMS script tags so the current cache-busted versions always run.
+    html = html.replace(/<script\\b[^>]*src=["'][^"']*supabase-config\\.js[^"']*["'][^>]*>\\s*<\\/script>/gi, "");
+    html = html.replace(/<script\\b[^>]*src=["'][^"']*site-cms\\.js[^"']*["'][^>]*>\\s*<\\/script>/gi, "");
+    html = html.replace(/<script\\b[^>]*src=["'][^"']*site-videos-public\\.js[^"']*["'][^>]*>\\s*<\\/script>/gi, "");
+    const scripts = [
+      '<script src="./supabase-config.js?v=20261019-2"><\\/script>',
+      '<script type="module" src="./site-cms.js?v=20261019-2"><\\/script>',
+      '<script type="module" src="./site-videos-public.js?v=20261019-2"><\\/script>'
+    ];
     if (scripts.length) {
       const additions = scripts.join("\n");
       if (/<\/body\s*>/i.test(html)) html = html.replace(/<\/body\s*>/i, additions + "\n</body>");
