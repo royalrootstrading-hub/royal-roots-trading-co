@@ -27,9 +27,9 @@
     html = html.replace(/<script\b[^>]*src=["'][^"']*site-cms\.js[^"']*["'][^>]*>\s*<\/script>/gi, "");
     html = html.replace(/<script\b[^>]*src=["'][^"']*site-videos-public\.js[^"']*["'][^>]*>\s*<\/script>/gi, "");
     const scripts = [
-      '<script src="./supabase-config.js?v=20261019-2"><\/script>',
-      '<script type="module" src="./site-cms.js?v=20261019-2"><\/script>',
-      '<script type="module" src="./site-videos-public.js?v=20261019-2"><\/script>'
+      '<script src="./supabase-config.js?v=20261020-1"><\/script>',
+      '<script type="module" src="./site-cms.js?v=20261020-1"><\/script>',
+      '<script type="module" src="./site-videos-public.js?v=20261020-1"><\/script>'
     ];
     if (scripts.length) {
       const additions = scripts.join("\n");
