@@ -27,3 +27,16 @@ The public site continues to show the existing static catalogue until the projec
 Sign in to admin.html with the authorized account. Add a draft with several images; it should not show publicly until published. Test editing, unpublishing and deleting. Unauthorized users must not be able to write products or upload images.
 
 Image uploads accept JPEG/PNG/WebP/GIF up to 8 MB each. The image bucket is publicly readable for the public catalogue; uploads and modifications are restricted to the admin's UUID folder. Deleting a product row does not automatically delete stored image files.
+
+## 5. Full website editor
+
+Open https://royalrootstrading-hub.github.io/royal-roots-trading-co/website-admin.html and sign in with the same authorized administrator account.
+
+The editor supports:
+- Brand name, tagline, logo, colours, contact details, About text and search description
+- Editing, hiding/showing and reordering the main homepage sections
+- Adding, editing, hiding/showing, reordering and deleting custom content sections with optional images and buttons
+- Editing gallery tiles and advantage cards, including descriptions, icons/images, visibility and order
+- Product catalogue management through `admin.html`
+
+The website editor schema is documented in `supabase/website-cms.sql`; the live project has already had this migration applied. Major page sections are editable, while some nested prebuilt gallery/advantage tiles and embedded third-party forms/videos remain part of the static page.
