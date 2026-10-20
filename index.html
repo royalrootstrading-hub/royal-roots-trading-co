@@ -19,7 +19,7 @@
 <script>
 (async function(){
   try {
-    const response = await fetch("./legacy-site.html?content-refresh=20261020-4", {cache:"force-cache"});
+    const response = await fetch("./legacy-site.html?content-refresh=20261020-5", {cache:"force-cache"});
     if (!response.ok) throw new Error("Website content could not be loaded (" + response.status + ").");
     let html = await response.text();
     // Remove older CMS script tags so the current cache-busted versions always run.
@@ -37,8 +37,8 @@
       section,main,header,footer,nav,.container,.row,[class*="container"]{max-width:100%}
       input,select,textarea,button{max-width:100%;font:inherit}
       @media(max-width:768px){
-        /* Target the blank video section visible below the mobile navigation. */
-        #video{height:auto!important;min-height:0!important;max-height:none!important;margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important;overflow:visible!important}
+        /* Fix oversized blank video section below mobile navigation. */
+        #video{height:auto!important;min-height:0!important;max-height:none!important;margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important;overflow:hidden!important;display:flow-root!important} #video>*,#video .section-inner,#video .video-content{height:auto!important;min-height:0!important;max-height:none!important;margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important}
         #video iframe,#video video{display:block;width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:16/9;max-height:220px!important}
         #video .container,#video .row,#video [class*=container],#video [class*=wrapper],#video [class*=embed]{height:auto!important;min-height:0!important;max-height:none!important;padding-top:0!important;padding-bottom:0!important;margin-top:0!important;margin-bottom:0!important}
         #video:empty{display:none!important}
@@ -64,8 +64,8 @@
         iframe[src*="youtube"],iframe[src*="youtu.be"],iframe[src*="facebook"],video,.video-container,.video-wrapper,.video-frame,.responsive-video{width:100%!important;max-width:100%!important;aspect-ratio:16/9;height:auto!important;min-height:0!important}
         iframe[src*="youtube"],iframe[src*="youtu.be"]{height:auto!important}
         #rr-social-footer{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
-        #rr-social-footer nav{flex-wrap:wrap}
-        #rr-social-footer a{min-height:44px}
+        #rr-social-footer nav{flex-wrap:wrap;gap:6px!important;justify-content:center!important}
+        #rr-social-footer a{min-height:28px!important;height:auto!important;padding:4px 8px!important;font-size:12px!important;line-height:1.2!important;gap:5px!important;border-radius:14px!important;display:inline-flex!important;align-items:center!important} #rr-social-footer svg,#rr-social-footer img{width:15px!important;height:15px!important;max-width:15px!important;max-height:15px!important}
         .whatsapp-float,.whatsapp-button,[class*="whatsapp"]{max-width:calc(100vw - 24px)}
       }
       @media(max-width:420px){
@@ -74,11 +74,11 @@
         button,a{touch-action:manipulation}
       }
     </style>`;
-    if (/<head\\b[^>]*>/i.test(html)) html = html.replace(/<head\\b[^>]*>/i, match => match + mobileFix);
+    if (/<head\b[^>]*>/i.test(html)) html = html.replace(/<head\b[^>]*>/i, match => match + mobileFix);
     const scripts = [
-      '<script src="./supabase-config.js?v=20261020-4"><\/script>',
-      '<script type="module" src="./site-cms.js?v=20261020-4"><\/script>',
-      '<script type="module" src="./site-videos-public.js?v=20261020-4"><\/script>'
+      '<script src="./supabase-config.js?v=20261020-5"><\/script>',
+      '<script type="module" src="./site-cms.js?v=20261020-5"><\/script>',
+      '<script type="module" src="./site-videos-public.js?v=20261020-5"><\/script>'
     ];
     if (scripts.length) {
       const additions = scripts.join("\n");
