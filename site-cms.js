@@ -18,15 +18,15 @@ if(s){applyGlobalSettings(s);updateContact(s)}
 await renderPublishedProducts(sb);
 addSocialFooter();
 function addSocialFooter(){
- const existing=document.querySelector("#rr-social-footer");if(existing)return;
+ const existing=document.querySelector("#rr-social-footer");if(existing)existing.remove();if(s?.social_links_visible===false)return;
  const footer=document.querySelector("footer")||document.body;
  const section=document.createElement("section");section.id="rr-social-footer";section.setAttribute("aria-label","Follow Royal Roots on social media");
  const title=document.createElement("h2");title.textContent="Follow Royal Roots";section.append(title);
  const links=[
-  {label:"YouTube",url:"https://youtube.com/@royalrootstradingco?si=d4iTH6aORCCgYw15",icon:"▶"},
-  {label:"Instagram",url:"https://www.instagram.com/royalroots_trading/",icon:"◎"},
-  {label:"Facebook",url:"https://www.facebook.com/profile.php?id=61595561580640",icon:"f"}
- ];
+  {label:"YouTube",url:s?.social_youtube_url||"https://youtube.com/@royalrootstradingco?si=d4iTH6aORCCgYw15",icon:"▶"},
+  {label:"Instagram",url:s?.social_instagram_url||"https://www.instagram.com/royalroots_trading/",icon:"◎"},
+  {label:"Facebook",url:s?.social_facebook_url||"https://www.facebook.com/profile.php?id=61595561580640",icon:"f"}
+ ].filter(item=>/^https?:\/\//i.test(item.url));
  const nav=document.createElement("nav");nav.setAttribute("aria-label","Social media links");
  for(const item of links){const a=document.createElement("a");a.href=item.url;a.target="_blank";a.rel="noopener noreferrer";a.setAttribute("aria-label","Open Royal Roots on "+item.label);const icon=document.createElement("span");icon.className="rr-social-icon";icon.setAttribute("aria-hidden","true");icon.textContent=item.icon;const label=document.createElement("span");label.textContent=item.label;a.append(icon,label);nav.append(a)}
  section.append(nav);footer.append(section);
