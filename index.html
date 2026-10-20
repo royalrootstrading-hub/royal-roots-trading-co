@@ -37,6 +37,14 @@
       section,main,header,footer,nav,.container,.row,[class*="container"]{max-width:100%}
       input,select,textarea,button{max-width:100%;font:inherit}
       @media(max-width:768px){
+        /* Target the blank video section visible below the mobile navigation. */
+        #video{height:auto!important;min-height:0!important;max-height:none!important;margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important;overflow:visible!important}
+        #video iframe,#video video{display:block;width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:16/9;max-height:220px!important}
+        #video .container,#video .row,#video [class*=container],#video [class*=wrapper],#video [class*=embed]{height:auto!important;min-height:0!important;max-height:none!important;padding-top:0!important;padding-bottom:0!important;margin-top:0!important;margin-bottom:0!important}
+        #video:empty{display:none!important}
+        /* Hide a stale empty video placeholder instead of leaving a tall white block. */
+        .video-placeholder:empty,.video-placeholder:has(iframe),.video-placeholder:has(video){height:auto!important;min-height:0!important}
+
         /* Collapse oversized embedded video areas on mobile */
         iframe{max-height:220px!important}
         [class*=video-container],[class*=video-wrapper],[class*=video-embed],[class*=youtube-embed],[class*=embed-responsive],[class*=embed-container]{height:auto!important;min-height:0!important;max-height:none!important;padding-bottom:0!important}
