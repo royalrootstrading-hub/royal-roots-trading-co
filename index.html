@@ -19,7 +19,7 @@
 <script>
 (async function(){
   try {
-    const response = await fetch("./legacy-site.html?content-refresh=20261020", {cache:"force-cache"});
+    const response = await fetch("./legacy-site.html?content-refresh=20261020-2", {cache:"force-cache"});
     if (!response.ok) throw new Error("Website content could not be loaded (" + response.status + ").");
     let html = await response.text();
     // Remove older CMS script tags so the current cache-busted versions always run.
@@ -27,9 +27,9 @@
     html = html.replace(/<script\b[^>]*src=["'][^"']*site-cms\.js[^"']*["'][^>]*>\s*<\/script>/gi, "");
     html = html.replace(/<script\b[^>]*src=["'][^"']*site-videos-public\.js[^"']*["'][^>]*>\s*<\/script>/gi, "");
     const scripts = [
-      '<script src="./supabase-config.js?v=20261020-1"><\/script>',
-      '<script type="module" src="./site-cms.js?v=20261020-1"><\/script>',
-      '<script type="module" src="./site-videos-public.js?v=20261020-1"><\/script>'
+      '<script src="./supabase-config.js?v=20261020-2"><\/script>',
+      '<script type="module" src="./site-cms.js?v=20261020-2"><\/script>',
+      '<script type="module" src="./site-videos-public.js?v=20261020-2"><\/script>'
     ];
     if (scripts.length) {
       const additions = scripts.join("\n");
