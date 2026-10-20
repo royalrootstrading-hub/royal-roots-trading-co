@@ -17,7 +17,6 @@ arrange(builtins);
 if(s){applyGlobalSettings(s);updateContact(s)}
 await renderPublishedProducts(sb);
 addSocialFooter();
-async 
 function addSocialFooter(){
  const existing=document.querySelector("#rr-social-footer");if(existing)return;
  const footer=document.querySelector("footer")||document.body;
@@ -33,7 +32,7 @@ function addSocialFooter(){
  section.append(nav);footer.append(section);
  const style=document.createElement("style");style.id="rr-social-footer-style";style.textContent="#rr-social-footer{clear:both;display:block;width:100%;box-sizing:border-box;margin:0;padding:28px 16px calc(28px + env(safe-area-inset-bottom,0px));background:#071b62;color:#fff;text-align:center}#rr-social-footer h2{font-size:clamp(1.1rem,3vw,1.5rem);line-height:1.3;margin:0 0 18px;color:inherit}#rr-social-footer nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px}#rr-social-footer a{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;min-width:44px;max-width:100%;box-sizing:border-box;padding:10px 16px;border:1px solid rgba(255,255,255,.4);border-radius:999px;color:#fff;text-decoration:none;font-weight:600;line-height:1.2;overflow-wrap:anywhere}#rr-social-footer a:focus-visible{outline:3px solid #d4a127;outline-offset:3px}#rr-social-footer a:hover{background:rgba(255,255,255,.12)}#rr-social-footer .rr-social-icon{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:17px;font-weight:800;flex:0 0 22px}@media(max-width:480px){#rr-social-footer{padding:24px 12px calc(24px + env(safe-area-inset-bottom,0px))}#rr-social-footer nav{gap:8px}#rr-social-footer a{padding:10px 12px;flex:1 1 120px;max-width:180px;font-size:14px}}";document.head.append(style);
 }
-function renderPublishedProducts(client){
+async function renderPublishedProducts(client){
  try{
   const {data:products,error}=await client.from("products").select("id,name,category,description,image_urls").eq("published",true).order("created_at",{ascending:false});
   if(error)throw error;
