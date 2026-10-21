@@ -75,12 +75,12 @@
       }
     </style>`;
     if (/<head\b[^>]*>/i.test(html)) html = html.replace(/<head\b[^>]*>/i, match => match + mobileFix);
+    const closeScript = "</scr" + "ipt>";
     const scripts = [
-      '<script src="./supabase-config.js?v=20261021-3"><\/script>',
-      '<script type="module" src="./site-cms.js?v=20261021-3"><\/script>',
-      '<script type="module" src="./site-videos-public.js?v=20261021-3"><\/script>'
-    ];
-    if (scripts.length) {
+      '<script src="./supabase-config.js?v=20261021-4">' + closeScript,
+      '<script type="module" src="./site-cms.js?v=20261021-4">' + closeScript,
+      '<script type="module" src="./site-videos-public.js?v=20261021-4">' + closeScript
+    ];    if (scripts.length) {
       const additions = scripts.join("\n");
       if (/<\/body\s*>/i.test(html)) html = html.replace(/<\/body\s*>/i, additions + "\n</body>");
       else html += additions;
