@@ -97,7 +97,7 @@ function applyGlobalSettings(s){
 
 function updateContact(s){
  const contact=document.querySelector("#contact"),phone=(s.contact_phone||"").trim(),digits=phone.replace(/\D/g,""),email=(s.contact_email||"").trim(),address=(s.address||"").trim();
- if(contact&&phone)contact.querySelectorAll('a[href^="tel:"]').forEach(a=>{a.href="tel:"+digits;a.textContent=phone});
+ if(contact&&phone){const telLinks=[...contact.querySelectorAll('a[href^="tel:"]')];if(telLinks.length===1){telLinks[0].href="tel:"+digits;telLinks[0].textContent=phone}}
  if(contact&&email)contact.querySelectorAll('a[href^="mailto:"]').forEach(a=>{a.href="mailto:"+email;a.textContent=email});
  if(contact&&address){const p=[...contact.querySelectorAll("p")].find(x=>/Padam Nagar|Karimnagar|Telangana/i.test(x.textContent));if(p)p.textContent=address}
  const raw=(s.whatsapp||phone).trim();let waUrl="";
