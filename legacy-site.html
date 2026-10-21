@@ -52,7 +52,7 @@ section{padding:72px 0}
 .head{max-width:620px;margin-bottom:36px}
 .head h2{font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-.01em}
 .head p{color:var(--muted);margin:12px 0 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.product-carousel-controls{display:flex;justify-content:flex-end;gap:10px;margin:0 0 12px}.product-scroll-btn{width:42px;height:42px;border:0;border-radius:50%;background:#e9edf5;color:#071b62;font-size:30px;line-height:1;cursor:pointer}.product-scroll-btn:focus-visible{outline:3px solid #d4a127;outline-offset:2px}.product-horizontal-scroll{display:flex!important;gap:18px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:8px 2px 18px;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin}.product-horizontal-scroll>*{flex:0 0 clamp(230px,28vw,300px);min-width:0;scroll-snap-align:start}.product-horizontal-scroll::-webkit-scrollbar{height:8px}.product-horizontal-scroll::-webkit-scrollbar-thumb{background:#c4cbd8;border-radius:99px}@media(max-width:600px){.product-horizontal-scroll>*{flex-basis:78vw}.product-carousel-controls{margin-bottom:8px}}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
 .prod{background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
 .sw{height:84px;border-bottom:1px solid var(--line)}
 .prod div.b{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
@@ -132,7 +132,7 @@ footer strong{color:#fff;font-family:"Bricolage Grotesque",sans-serif}
 
 <section id="products"><div class="wrap">
 <div class="head"><h2>Our product range</h2><p>Twelve walling, board, ceiling, flooring and structural solutions. Ask us for sizes, thicknesses and current rates.</p></div>
-<div class="grid" id="pgrid"></div>
+<div class="product-carousel-controls" aria-label="Product scrolling controls"><button type="button" class="product-scroll-btn" data-scroll-target="pgrid" data-scroll-direction="-1" aria-label="Scroll products left">‹</button><button type="button" class="product-scroll-btn" data-scroll-target="pgrid" data-scroll-direction="1" aria-label="Scroll products right">›</button></div><div class="grid product-horizontal-scroll" id="pgrid" tabindex="0" aria-label="Scrollable product range"></div>
 <p class="note">Swatches are illustrations only. Actual product appearance and finish may vary.</p>
 </div></section>
 
