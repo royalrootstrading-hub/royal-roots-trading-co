@@ -108,6 +108,8 @@ function updateContact(s){
  if(contact&&phone){const telLinks=[...contact.querySelectorAll('a[href^="tel:"]')];if(telLinks.length===1){telLinks[0].href="tel:"+digits;telLinks[0].textContent=phone}}
  if(contact&&email)contact.querySelectorAll('a[href^="mailto:"]').forEach(a=>{a.href="mailto:"+email;a.textContent=email});
  if(contact&&address){const p=[...contact.querySelectorAll("p")].find(x=>/Padam Nagar|Karimnagar|Telangana/i.test(x.textContent));if(p)p.textContent=address}
+ const mapFrame=document.querySelector(".location-map-frame iframe");if(mapFrame&&address){mapFrame.src="https://www.google.com/maps?q="+encodeURIComponent(address)+"&output=embed";mapFrame.title="Royal Roots Trading & Co. location: "+address}
+ const mapLabel=document.querySelector(".location-map>p");if(mapLabel&&address)mapLabel.textContent=address;
  const raw=(s.whatsapp||phone).trim();let waUrl="";
  if(/^https?:\/\//i.test(raw)){try{const u=new URL(raw);if(u.protocol==="https:"&&/^(wa\.me|api\.whatsapp\.com|www\.whatsapp\.com)$/i.test(u.hostname))waUrl=u.href}catch{}}
  else{const d=raw.replace(/\D/g,"");if(d.length>=8)waUrl="https://wa.me/"+d}
