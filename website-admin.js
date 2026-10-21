@@ -1,4 +1,4 @@
-import {createClient} from "https://esm.sh/@supabase/supabase-js@2";
+import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 const $=s=>document.querySelector(s),url=window.SUPABASE_URL,key=window.SUPABASE_ANON_KEY;
 let sb,user,sections=[],editingId=null,settings={},cards=[],editingCardId=null;
 const notice=$("#notice"),login=$("#login"),dash=$("#dashboard"),editor=$("#section-editor");
