@@ -67,14 +67,14 @@ function ensureGallerySection(allCards){
  products.parentElement.insertBefore(section,products.nextSibling);
 }
 function renderCards(allCards){
- const galleryCards=allCards.filter(x=>x.group_key==="gallery"&&x.visible),featureCards=allCards.filter(x=>x.group_key==="features"&&x.visible);
+ const galleryCards=allCards.filter(x=>x.group_key==="gallery"&&x.visible),featureCards=allCards.filter(x=>x.group_key==="features"&&x.visible),hasGallery=allCards.some(x=>x.group_key==="gallery"),hasFeatures=allCards.some(x=>x.group_key==="features");
  let gallery=document.querySelector(".gallery-grid");
- if(!gallery&&galleryCards.length){ensureGallerySection(allCards);gallery=document.querySelector("#gallery .rr-cms-gallery-grid")}
- if(gallery&&galleryCards.length){gallery.replaceChildren();for(const card of galleryCards){const item=document.createElement("article");item.className="rr-cms-card";
+ if(!gallery&&hasGallery){ensureGallerySection(allCards);gallery=document.querySelector("#gallery .rr-cms-gallery-grid")}
+ if(gallery&&hasGallery){gallery.replaceChildren();for(const card of galleryCards){const item=document.createElement("article");item.className="rr-cms-card";
   if(card.image_url){const im=document.createElement("img");im.src=card.image_url;im.alt=card.title||"";im.loading="lazy";item.append(im)}else{const visual=document.createElement("div");visual.className="rr-cms-card-icon";visual.textContent=card.icon||"▦";visual.setAttribute("aria-hidden","true");item.append(visual)}
   const body=document.createElement("div");body.className="rr-cms-card-body";const h=document.createElement("h3");h.textContent=card.title||"";body.append(h);if(card.body){const p=document.createElement("p");p.textContent=card.body;body.append(p)}item.append(body);gallery.append(item)}}
  let features=document.querySelector(".feature-grid")||document.querySelector(".adv");
- if(features&&featureCards.length){features.replaceChildren();for(const card of featureCards){const item=document.createElement("div");item.className="rr-cms-feature";const h=document.createElement("h3");h.textContent=card.title||"";item.append(h);if(card.body){const p=document.createElement("p");p.textContent=card.body;item.append(p)}features.append(item)}}
+ if(features&&hasFeatures){features.replaceChildren();for(const card of featureCards){const item=document.createElement("div");item.className="rr-cms-feature";const h=document.createElement("h3");h.textContent=card.title||"";item.append(h);if(card.body){const p=document.createElement("p");p.textContent=card.body;item.append(p)}features.append(item)}}
  if(!document.querySelector("#rr-cms-cards-style")){const style=document.createElement("style");style.id="rr-cms-cards-style";style.textContent=".rr-cms-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:18px}.rr-cms-card{background:#fff;border:1px solid var(--line,#d9d6ca);border-radius:6px;overflow:hidden;min-width:0}.rr-cms-card>img,.rr-cms-card-icon{width:100%;height:150px;object-fit:cover;display:grid;place-items:center;background:#eef2fb;color:var(--gold,#c9a227);font-size:44px}.rr-cms-card-body{padding:16px}.rr-cms-card h3,.rr-cms-feature h3{margin:0 0 8px}.rr-cms-card p,.rr-cms-feature p{margin:0;color:var(--muted,#4b5568)}.rr-cms-feature{padding:22px 22px 22px 0;border-bottom:1px solid #2a3a63}.rr-cms-feature h3{font-size:18px;color:var(--gold,#c9a227)}.rr-cms-feature p{color:#c4cde2;font-size:15.5px}@media(max-width:640px){.rr-cms-gallery-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:12px}}";document.head.append(style)}
 }
 function applyGlobalSettings(s){
@@ -90,7 +90,7 @@ function applyGlobalSettings(s){
   if(a){if(s.hero_button_text)a.textContent=s.hero_button_text;if(s.hero_button_url)a.href=s.hero_button_url}
   if(s.hero_image_url){let image=hero.querySelector("img");if(image){image.src=s.hero_image_url;image.alt=s.hero_title||s.site_title||"Royal Roots"}else{hero.style.backgroundImage="linear-gradient(90deg,rgba(5,15,48,.68),rgba(5,15,48,.12)),url("+JSON.stringify(s.hero_image_url)+")";hero.style.backgroundSize="cover";hero.style.backgroundPosition="center"}}
  }
- const navMap=[["#products",s.nav_products_label],["#about",s.nav_about_label],["#video",s.nav_gallery_label],["#follow",s.nav_gallery_label],["#contact",s.nav_contact_label]];
+ const navMap=[["#products",s.nav_products_label],["#about",s.nav_about_label],["#video",s.nav_gallery_label],["#contact",s.nav_contact_label]];
  for(const [href,label] of navMap){if(!label)continue;document.querySelectorAll('header a[href="'+href+'"],nav a[href="'+href+'"]').forEach(a=>{a.textContent=label})}
  if(s.footer_text){let footer=document.querySelector("footer");if(footer){let p=footer.querySelector("#rr-footer-text");if(!p){p=document.createElement("p");p.id="rr-footer-text";footer.append(p)}p.textContent=s.footer_text}}
 }
