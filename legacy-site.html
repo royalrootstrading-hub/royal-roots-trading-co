@@ -100,6 +100,13 @@ textarea{min-height:96px;resize:vertical}
 .ok{color:#0a6b34}.err{color:#a3261b}
 .contact p{margin:0 0 14px}
 .contact a{color:var(--blue);font-weight:600}
+.location-map{margin:24px 0 18px;min-width:0}
+.location-map h3{font-size:22px;margin-bottom:6px}
+.location-map>p{font-size:15px;color:var(--muted);margin:0 0 12px}
+.location-map-frame{width:100%;height:320px;overflow:hidden;border:1px solid var(--line);border-radius:8px;background:#e9edf5}
+.location-map-frame iframe{display:block;width:100%;height:100%;border:0}
+.location-map-link{margin-top:12px;font-size:14px;padding:10px 14px}
+@media(max-width:600px){.location-map-frame{height:260px}.location-map-link{display:inline-block;max-width:100%;white-space:normal}}
 @media(max-width:820px){.enq{grid-template-columns:1fr}form{grid-template-columns:1fr}}
 .social{display:flex;gap:8px;flex-wrap:wrap}.social a{border:1.5px solid currentColor;border-radius:99px;padding:6px 12px;font:700 14px "Bricolage Grotesque",sans-serif;text-decoration:none;min-height:32px;display:inline-flex;align-items:center;justify-content:center}.social a[href*="youtube"]{color:#ff3040}.social a[href*="instagram"]{color:#c13584}.social a[href*="facebook"]{color:#1877f2}.social a:hover{background:var(--gold);border-color:var(--gold);color:var(--ink)}@media(max-width:760px){.social{gap:6px}.social a{padding:5px 9px;min-height:28px;font-size:12px}.wrap{padding-left:16px;padding-right:16px}.banner .wrap{padding-top:20px}form{padding:18px}.wa{right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:10px 14px;font-size:13px}}.follow{background:var(--blue);color:#fff;padding:36px 0}.follow .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}.follow h2{font-size:clamp(22px,3vw,30px)}.follow p{margin:6px 0 0;color:#d6e0f5}
 footer{background:var(--ink);color:#b8c3dc;padding:32px 0;font-size:15px}
@@ -171,6 +178,14 @@ footer strong{color:#fff;font-family:"Bricolage Grotesque",sans-serif}
 <p><a href="tel:+917799187189">91 77991 87189</a> · <a href="https://wa.me/917799187189" target="_blank" rel="noopener noreferrer">WhatsApp</a><br><a href="tel:+918688475976">91 86884 75976</a> · <a href="https://wa.me/918688475976" target="_blank" rel="noopener noreferrer">WhatsApp</a><br>Phone / WhatsApp</p>
 <p><a href="mailto:Royalrootstrading@gmail.com">Royalrootstrading@gmail.com</a><br><a href="mailto:Royalrootstrading@outlook.com">Royalrootstrading@outlook.com</a></p>
 <p>2-24/1 Padam Nagar,<br>Karimnagar, Telangana, India</p>
+<div class="location-map" aria-label="Map showing Royal Roots Trading & Co. in Padam Nagar, Karimnagar">
+  <h3>Find us in Karimnagar</h3>
+  <p>2-24/1 Padam Nagar, Karimnagar, Telangana, India</p>
+  <div class="location-map-frame">
+    <iframe title="Royal Roots Trading & Co. location in Padam Nagar, Karimnagar, Telangana" src="https://www.google.com/maps?q=2-24%2F1%20Padam%20Nagar%2C%20Karimnagar%2C%20Telangana%2C%20India&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+  </div>
+  <a class="btn location-map-link" href="https://www.google.com/maps/search/?api=1&query=2-24%2F1%20Padam%20Nagar%2C%20Karimnagar%2C%20Telangana%2C%20India" target="_blank" rel="noopener noreferrer">Open directions in Google Maps</a>
+</div>
 <div class="social" style="color:var(--blue)"><a href="https://www.youtube.com/@royalrootstradingco" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/royalroots_trading/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/profile.php?id=61595561580640" target="_blank" rel="noopener">Facebook</a></div>
 </div>
 <div class="enquiry-actions" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px"><a class="btn" href="#f" style="background:var(--blue);color:#fff;border:2px solid var(--blue);border-radius:999px;padding:9px 18px">Quick enquiry</a><a class="btn" href="https://forms.gle/2yjZYEBhq3scwtyv5" target="_blank" rel="noopener noreferrer" style="background:transparent;color:var(--blue);border:1.5px solid var(--blue);border-radius:999px;padding:9px 18px">Google Form</a><a class="btn" href="https://wa.me/917799187189?text=Hello%20Royal%20Roots%2C%20I%20would%20like%20a%20quotation." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp enquiry to 7799187189" style="background:#1faa59;color:#fff;border:2px solid #1faa59;border-radius:999px;padding:9px 18px">WhatsApp: 7799187189</a><a class="btn" href="https://wa.me/918688475976?text=Hello%20Royal%20Roots%2C%20I%20would%20like%20a%20quotation." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp enquiry to 8688475976" style="background:transparent;color:#168344;border:2px solid #1faa59;border-radius:999px;padding:9px 18px">WhatsApp: 8688475976</a></div>
