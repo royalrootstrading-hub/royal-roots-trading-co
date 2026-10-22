@@ -16,7 +16,7 @@ if(s?.about_text){const p=document.querySelector("#about .about p, #about .wrap 
 arrange(builtins);
 (rows||[]).filter(x=>!x.target_id&&x.visible).forEach(x=>addCustom(x));renderCards(cards||[]);
 if(s){applyGlobalSettings(s);updateContact(s)}
-await renderPublishedProducts(sb);\nawait applyProductCardImages(sb);
+await renderPublishedProducts(sb);
 syncSocialLinks(s);
 function enableSupplyCarousel(){
  const candidates=new Set([...document.querySelectorAll(".gallery-grid,#gallery .rr-cms-gallery-grid,.rr-cms-gallery-grid")]);
@@ -25,9 +25,7 @@ function enableSupplyCarousel(){
 }
 const supplyStyle=document.createElement("style");supplyStyle.textContent=".rr-supply-carousel-controls{display:flex;justify-content:flex-end;gap:10px;margin:0 0 12px}.rr-supply-scroll-btn{width:42px;height:42px;border:0;border-radius:50%;background:#e9edf5;color:#071b62;font-size:30px;line-height:1;cursor:pointer}.rr-supply-scroll-btn:focus-visible{outline:3px solid #d4a127;outline-offset:2px}.rr-supply-horizontal-scroll{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:18px;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:8px 2px 18px;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;max-width:100%}.rr-supply-horizontal-scroll>*{display:block;flex:0 0 clamp(230px,22vw,280px)!important;width:clamp(230px,22vw,280px);min-width:0;scroll-snap-align:start}.rr-supply-horizontal-scroll::-webkit-scrollbar{height:8px}.rr-supply-horizontal-scroll::-webkit-scrollbar-thumb{background:#c4cbd8;border-radius:99px}.rr-supply-horizontal-scroll img{max-width:100%}@media(max-width:600px){.rr-supply-horizontal-scroll>*{flex-basis:78vw!important;width:78vw}.rr-supply-carousel-controls{margin-bottom:8px}}";document.head.append(supplyStyle);enableSupplyCarousel();
 
-
-async function applyProductCardImages(client){try{const{data,error}=await client.from("product_card_images").select("product_key,image_url,alt_text");if(error)throw error;let hasPhoto=false;const cards=[...document.querySelectorAll("#pgrid .prod")];for(const item of(data||[])){if(!item.image_url)continue;const card=cards.find(el=>(el.querySelector("h3")?.textContent||"").trim()===item.product_key);if(!card)continue;const sw=card.querySelector(".sw");if(!sw)continue;let image=sw.querySelector("img");if(!image){image=document.createElement("img");image.loading="lazy";image.decoding="async";image.style.cssText="display:block;width:100%;height:100%;object-fit:cover";sw.append(image)}image.src=item.image_url;image.alt=item.alt_text||item.product_key;image.loading="lazy";image.decoding="async";sw.setAttribute("role","img");sw.setAttribute("aria-label",image.alt);hasPhoto=true}const note=document.querySelector("#products .note");if(note)note.textContent=hasPhoto?"Images are for illustration only. Actual product appearance and finish may vary.":"Swatches are illustrations only. Actual product appearance and finish may vary."}catch(error){console.warn("Royal Roots product card images could not be loaded:",error)}}
-\nfunction syncSocialLinks(settings){
+function syncSocialLinks(settings){
  const groups=[...document.querySelectorAll(".social")],visible=settings?.social_links_visible!==false;
  for(const group of groups){group.hidden=!visible;if(!visible)continue;for(const link of group.querySelectorAll("a")){const label=(link.textContent||link.getAttribute("aria-label")||"").toLowerCase();const url=label.includes("youtube")?settings?.social_youtube_url:label.includes("instagram")?settings?.social_instagram_url:label.includes("facebook")?settings?.social_facebook_url:null;if(url&&/^https?:\/\//i.test(url))link.href=url}}
  if(visible&&!groups.length)addSocialFooter();
