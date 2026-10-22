@@ -4,6 +4,17 @@ if(url&&key){try{
 const sb=createClient(url,key);
 const [{data:s},{data:rows},{data:cards}]=await Promise.all([sb.from("site_settings").select("*").eq("id","main").maybeSingle(),sb.from("site_sections").select("*").order("sort_order").order("created_at"),sb.from("site_cards").select("*").order("group_key").order("sort_order")]);
 if(s){
+const offerText=(s.announcement_text||"").trim();
+const offerTrack=document.querySelector(".rr-top-slider-track");
+if(offerTrack&&offerText){
+  const messages=offerText.split("|").map(v=>v.trim()).filter(Boolean);
+  const groups=[...offerTrack.querySelectorAll(".rr-top-slider-group")];
+  for(const group of groups){
+    group.replaceChildren();
+    const items=messages.length?messages:["Royal Roots Offers"];
+    items.forEach((message,i)=>{if(i){const star=document.createElement("span");star.className="rr-star";star.textContent="✦";group.append(star)}const span=document.createElement("span");span.textContent=message;group.append(span)});
+  }
+}
 document.documentElement.style.setProperty("--rr-primary",s.primary_color||"#071b62");document.documentElement.style.setProperty("--rr-accent",s.accent_color||"#d4a127");document.documentElement.style.setProperty("--navy",s.primary_color||"#071b62");document.documentElement.style.setProperty("--blue",s.primary_color||"#12358e");document.documentElement.style.setProperty("--gold",s.accent_color||"#d4a127");
 if(s.site_title)document.title=s.site_title;
 if(s.meta_description){let m=document.querySelector('meta[name="description"]');if(!m){m=document.createElement("meta");m.name="description";document.head.append(m)}m.content=s.meta_description}
