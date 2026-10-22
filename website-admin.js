@@ -1,12 +1,12 @@
 import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 const $=s=>document.querySelector(s),url=window.SUPABASE_URL,key=window.SUPABASE_ANON_KEY;
-let sb,user,sections=[],editingId=null,settings={},cards=[],editingCardId=null;
+let sb,user,sections=[],editingId=null,settings={},cards=[],editingCardId=null,productCardImages=[];
 const notice=$("#notice"),login=$("#login"),dash=$("#dashboard"),editor=$("#section-editor");
 function msg(s,type=""){notice.textContent=s;notice.className=type;notice.hidden=!s}
 function view(on){login.hidden=on;dash.hidden=!on}
 async function allowed(u){const{data,error}=await sb.from("product_admins").select("user_id").eq("user_id",u.id).maybeSingle();if(error)throw error;return!!data}
-async function session(s){user=s?.user||null;if(!user){view(false);return}try{if(!await allowed(user)){await sb.auth.signOut();view(false);msg("This account is not authorized.","error");return}view(true);msg("Administrator access confirmed.","success");await loadSettings();await loadSections();await loadCards()}catch(e){view(false);msg(e.message||"Admin verification failed.","error")}}
-function switchTab(n){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===n));$("#tab-settings").hidden=n!=="settings";$("#tab-sections").hidden=n!=="sections";$("#tab-cards").hidden=n!=="cards";const v=$("#tab-videos");if(v)v.hidden=n!=="videos"}
+async function session(s){user=s?.user||null;if(!user){view(false);return}try{if(!await allowed(user)){await sb.auth.signOut();view(false);msg("This account is not authorized.","error");return}view(true);msg("Administrator access confirmed.","success");await loadSettings();await loadSections();await loadCards();await loadProductCardImages()}catch(e){view(false);msg(e.message||"Admin verification failed.","error")}}
+function switchTab(n){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===n));$("#tab-settings").hidden=n!=="settings";$("#tab-sections").hidden=n!=="sections";$("#tab-cards").hidden=n!=="cards";const pi=$("#tab-product-images");if(pi)pi.hidden=n!=="product-images";const v=$("#tab-videos");if(v)v.hidden=n!=="videos"}
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 
 function updateAdminMapPreview(){const address=$("#address")?.value.trim()||"2-24/1 Padam Nagar, Karimnagar, Telangana, India";const frame=$("#admin-map-preview");if(frame)frame.src="https://www.google.com/maps?q="+encodeURIComponent(address)+"&output=embed"}
@@ -35,6 +35,42 @@ $("#card-form").onsubmit=async e=>{e.preventDefault();const b=$("#save-card");b.
 async function toggleCard(card){const{error}=await sb.from("site_cards").update({visible:!card.visible,updated_at:new Date().toISOString()}).eq("id",card.id);if(error){msg(error.message,"error");return}await loadCards();msg("Card visibility updated.","success")}
 async function deleteCard(card){if(!confirm('Delete "'+card.title+'"?'))return;const{error}=await sb.from("site_cards").delete().eq("id",card.id);if(error){msg(error.message,"error");return}await loadCards();msg("Card deleted.","success")}
 async function moveCard(card,delta){const group=cards.filter(x=>x.group_key===card.group_key).sort((a,b)=>a.sort_order-b.sort_order),i=group.findIndex(x=>x.id===card.id),j=i+delta;if(j<0||j>=group.length)return;const a=group[i],b=group[j];let r=await sb.from("site_cards").update({sort_order:b.sort_order}).eq("id",a.id);if(r.error){msg(r.error.message,"error");return}r=await sb.from("site_cards").update({sort_order:a.sort_order}).eq("id",b.id);if(r.error){msg(r.error.message,"error");return}await loadCards();msg("Card order updated.","success")}
-$("#login-form").onsubmit=async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{const{error}=await sb.auth.signInWithPassword({email:$("#email").value.trim(),password:$("#password").value});if(error)throw error;const{data}=await sb.auth.getSession();await session(data.session)}catch(e){msg(e.message||"Sign-in failed.","error")}finally{b.disabled=false}};
+
+const PRODUCT_CARD_NAMES=["Rapicon Walls / Wall Partitions","Cement Wood Planks","Ceiling Designer Boards","2×2 Grid Ceiling","Heavy Duty Boards","Infill Dry Walls","Panelling Walls","Shelves & Cupboards","Steel Buildings","Mezzanine Flooring","50 mm Panels","75 mm Panels"];
+async function loadProductCardImages(){const root=$("#product-image-list");if(!root)return;const{data,error}=await sb.from("product_card_images").select("*");if(error)throw error;productCardImages=data||[];renderProductCardImages()}
+function renderProductCardImages(){
+ const root=$("#product-image-list");if(!root)return;root.replaceChildren();
+ PRODUCT_CARD_NAMES.forEach(name=>{
+  const saved=productCardImages.find(x=>x.product_key===name)||{product_key:name,image_url:"",alt_text:"",storage_path:""};
+  const row=document.createElement("article");row.className="product-image-row";
+  const thumb=document.createElement("div");thumb.className="product-image-thumb";
+  if(saved.image_url){const im=document.createElement("img");im.src=saved.image_url;im.alt=saved.alt_text||name;im.loading="lazy";thumb.append(im)}else{const sw=document.createElement("div");sw.className="product-image-swatch";sw.textContent="CSS swatch fallback";thumb.append(sw)}
+  const details=document.createElement("div");details.className="product-image-details";
+  const title=document.createElement("h3");title.textContent=name;
+  const status=document.createElement("p");status.className="muted small";status.textContent=saved.image_url?"Custom photo saved":"Using original CSS swatch";
+  const altLabel=document.createElement("label");altLabel.textContent="Image alt text (optional)";
+  const alt=document.createElement("input");alt.type="text";alt.maxLength=300;alt.placeholder="Describe the product photo";alt.value=saved.alt_text||"";alt.className="product-image-alt";alt.setAttribute("aria-label",name+" image alt text");altLabel.append(alt);
+  const actions=document.createElement("div");actions.className="product-image-actions";
+  const uploadButton=document.createElement("button");uploadButton.type="button";uploadButton.className="primary";uploadButton.textContent="Upload / Replace image";
+  const file=document.createElement("input");file.type="file";file.accept="image/jpeg,image/png,image/webp";file.hidden=true;file.setAttribute("aria-label","Choose image for "+name);
+  uploadButton.onclick=()=>file.click();
+  file.onchange=async()=>{const selected=file.files&&file.files[0];if(!selected)return;uploadButton.disabled=true;status.textContent="Compressing and uploading…";try{
+   const compressed=await compressProductImage(selected),slug=name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),path=user.id+"/product-cards/"+slug+"-"+Date.now()+".webp";
+   const{error:upErr}=await sb.storage.from("product-images").upload(path,compressed,{contentType:"image/webp",upsert:false});if(upErr)throw upErr;
+   const publicUrl=sb.storage.from("product-images").getPublicUrl(path).data.publicUrl;
+   const{error:saveErr}=await sb.from("product_card_images").upsert({product_key:name,image_url:publicUrl,storage_path:path,alt_text:alt.value.trim(),updated_at:new Date().toISOString()},{onConflict:"product_key"});
+   if(saveErr){await sb.storage.from("product-images").remove([path]);throw saveErr}
+   if(saved.storage_path)await sb.storage.from("product-images").remove([saved.storage_path]);
+   msg("Photo saved. It will appear on the public product carousel for all visitors.","success");await loadProductCardImages();
+  }catch(e){status.textContent=saved.image_url?"Custom photo saved":"Using original CSS swatch";msg(e.message||"Image upload failed.","error")}finally{uploadButton.disabled=false;file.value=""}};
+  const saveAlt=document.createElement("button");saveAlt.type="button";saveAlt.className="secondary";saveAlt.textContent="Save alt text";
+  saveAlt.onclick=async()=>{saveAlt.disabled=true;try{const{error}=await sb.from("product_card_images").upsert({product_key:name,image_url:saved.image_url||"",storage_path:saved.storage_path||"",alt_text:alt.value.trim(),updated_at:new Date().toISOString()},{onConflict:"product_key"});if(error)throw error;msg("Alt text saved.","success");await loadProductCardImages()}catch(e){msg(e.message||"Could not save alt text.","error")}finally{saveAlt.disabled=false}};
+  const removeButton=document.createElement("button");removeButton.type="button";removeButton.className="secondary";removeButton.textContent="Remove image";removeButton.disabled=!saved.image_url;
+  removeButton.onclick=async()=>{if(!confirm("Remove the custom photo for "+name+" and restore the CSS swatch?"))return;removeButton.disabled=true;try{const{error}=await sb.from("product_card_images").delete().eq("product_key",name);if(error)throw error;if(saved.storage_path)await sb.storage.from("product-images").remove([saved.storage_path]);msg("Custom photo removed. The original swatch is restored.","success");await loadProductCardImages()}catch(e){msg(e.message||"Could not remove image.","error");removeButton.disabled=false}};
+  actions.append(uploadButton,file,saveAlt,removeButton);details.append(title,status,altLabel,actions);row.append(thumb,details);root.append(row);
+ });
+}
+function compressProductImage(file){return new Promise((resolve,reject)=>{if(!["image/jpeg","image/png","image/webp"].includes(file.type)){reject(new Error("Choose a JPG, PNG or WebP image."));return}if(file.size>15*1024*1024){reject(new Error("Choose an image smaller than 15 MB."));return}const url=URL.createObjectURL(file),img=new Image();img.onload=()=>{try{const scale=Math.min(1,800/img.naturalWidth),canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Image compression is not supported in this browser.");ctx.drawImage(img,0,0,canvas.width,canvas.height);canvas.toBlob(blob=>{URL.revokeObjectURL(url);if(blob)resolve(blob);else reject(new Error("Could not compress this image."))},"image/webp",0.8)}catch(e){URL.revokeObjectURL(url);reject(e)}};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not read this image."))};img.src=url})}
+\n$("#login-form").onsubmit=async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{const{error}=await sb.auth.signInWithPassword({email:$("#email").value.trim(),password:$("#password").value});if(error)throw error;const{data}=await sb.auth.getSession();await session(data.session)}catch(e){msg(e.message||"Sign-in failed.","error")}finally{b.disabled=false}};
 $("#signout").onclick=async()=>{await sb.auth.signOut();user=null;view(false);msg("Signed out.")};
 if(!url||!key)msg("Supabase configuration missing.","error");else{sb=createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true}});sb.auth.onAuthStateChange((event,s)=>setTimeout(()=>session(s),0));const{data}=await sb.auth.getSession();await session(data.session)}
