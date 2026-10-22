@@ -4,7 +4,7 @@ if(url&&key){try{
 const sb=createClient(url,key);
 const [{data:s},{data:rows},{data:cards}]=await Promise.all([sb.from("site_settings").select("*").eq("id","main").maybeSingle(),sb.from("site_sections").select("*").order("sort_order").order("created_at"),sb.from("site_cards").select("*").order("group_key").order("sort_order")]);
 if(s){
-const offerText=(s.announcement_text||"").trim();
+const offerText=(s.announcement_text||"").trim()||"Royal Roots Offers | Special offers on building materials | Contact us for today’s prices | Visit Royal Roots Website";
 const offerTrack=document.querySelector(".rr-top-slider-track");
 if(offerTrack&&offerText){
   const messages=offerText.split("|").map(v=>v.trim()).filter(Boolean);
