@@ -114,9 +114,30 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 footer strong{color:#fff;font-family:"Bricolage Grotesque",sans-serif}
 .wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#1faa59;color:#fff;font:700 15px "Bricolage Grotesque",sans-serif;padding:12px 18px;border-radius:99px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:30}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Top news-style promotional slider */
+.rr-top-slider{height:30px;overflow:hidden;background:#ff414b;color:#fff;position:relative;z-index:25;font:700 14px/30px Arial,sans-serif;white-space:nowrap}
+.rr-top-slider a{display:block;color:inherit;text-decoration:none;overflow:hidden}
+.rr-top-slider a:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+.rr-top-slider-track{display:flex;width:max-content;min-width:200%;animation:rr-top-slide 28s linear infinite}
+.rr-top-slider-group{display:flex;align-items:center;justify-content:space-around;gap:34px;padding:0 24px;flex:0 0 50%}
+.rr-top-slider-group span{display:inline-block}
+.rr-top-slider-group .rr-star{font-size:15px}
+@keyframes rr-top-slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.rr-top-slider-track{animation:none;width:100%;min-width:0}.rr-top-slider-group:nth-child(2){display:none}.rr-top-slider-group:first-child{justify-content:center;gap:12px;overflow:hidden}.rr-top-slider-group:first-child span:nth-of-type(n+3){display:none}}
+@media(max-width:600px){.rr-top-slider{height:28px;font-size:12px;line-height:28px}.rr-top-slider-group{gap:20px;padding:0 16px}}
+
 </style>
 </head>
 <body>
+<div class="rr-top-slider" aria-label="Featured news link">
+  <a href="https://telanganatoday.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Telangana Today news website in a new tab">
+    <div class="rr-top-slider-track" aria-hidden="true">
+      <div class="rr-top-slider-group"><span>Don't miss the latest news</span><span class="rr-star">✦</span><span>Telangana Today</span><span class="rr-star">✦</span><span>News and updates</span><span class="rr-star">✦</span><span>Visit Telangana Today</span><span class="rr-star">✦</span></div>
+      <div class="rr-top-slider-group"><span>Don't miss the latest news</span><span class="rr-star">✦</span><span>Telangana Today</span><span class="rr-star">✦</span><span>News and updates</span><span class="rr-star">✦</span><span>Visit Telangana Today</span><span class="rr-star">✦</span></div>
+    </div>
+  </a>
+</div>
 <header><div class="wrap">
 <a class="logo" href="#top">ROYAL ROOTS TRADING & CO<small>Rooted in strength, built for tomorrow</small></a>
 <nav><a href="#products">Products</a><a href="#why">Advantages</a><a href="#about">About</a><a href="#video">Videos</a><a href="#contact">Contact</a><a class="btn" href="#enquiry">Get a quote</a></nav>
