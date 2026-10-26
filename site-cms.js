@@ -27,6 +27,9 @@ if(s?.about_text){const p=document.querySelector("#about .about p, #about .wrap 
 arrange(builtins);
 (rows||[]).filter(x=>!x.target_id&&x.visible).forEach(x=>addCustom(x));renderCards(cards||[]);
 if(s){applyGlobalSettings(s);updateContact(s)}
+// Avoid showing the old static banner while the current admin-managed hero image is applied.
+const bannerSection=document.querySelector(".banner");
+if(bannerSection){bannerSection.hidden=!!(s&&s.hero_image_url);if(!s||!s.hero_image_url)bannerSection.hidden=false;}
 await renderPublishedProducts(sb);
 syncSocialLinks(s);
 function enableSupplyCarousel(){
