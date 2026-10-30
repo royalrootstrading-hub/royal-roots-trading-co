@@ -175,7 +175,7 @@ const btn=document.getElementById('menuBtn'),nav=document.getElementById('nav');
 btn.addEventListener('click',()=>{nav.classList.toggle('open');btn.textContent=nav.classList.contains('open')?'✕':'☰';});
 nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');btn.textContent='☰';}));
 document.getElementById('year').textContent=new Date().getFullYear();
-const PRIMARY_EMAIL="royalrootstrading@outlook.com",CC_EMAIL="royalrootstrading@gmail.com",WA_NO="918688475976";
+const PRIMARY_EMAIL="royalrootstrading@gmail.com",CC_EMAIL="royalrootstrading@outlook.com",WA_NO="918688475976";
 document.querySelectorAll('a[data-product]').forEach(a=>a.addEventListener('click',()=>{const sel=document.getElementById('f_product');const v=a.getAttribute('data-product');for(const o of sel.options){if(o.text===v){sel.value=o.value||o.text;break}}}));
 const form=document.getElementById('enqForm'),st=document.getElementById('status'),sb=document.getElementById('sendBtn');
 function show(k,h){st.className='status '+k;st.innerHTML=h}
