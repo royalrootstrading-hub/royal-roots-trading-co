@@ -326,7 +326,7 @@ footer strong{color:#fff;font-family:Archivo,sans-serif}
 </main>
 
 <footer><div class="wrap">
-<div><strong>Royal Roots Trading &amp; Co.</strong><br>Rooted in strength, built for tomorrow.</div>
+<div><strong>Royal Roots Trading &amp; Co.</strong><br>Rooted in strength, built for tomorrow.<br><a href="../website-admin.html" rel="nofollow" style="opacity:.75">Admin</a></div>
 <div>Mohammad Zubair · +91 86884 75976<br>Karimnagar, Telangana, India</div>
 <div>© <span id="yr"></span> Royal Roots Trading &amp; Co.<br>Authorized dealer for Birla Aerocon</div>
 </div></footer>
@@ -334,7 +334,8 @@ footer strong{color:#fff;font-family:Archivo,sans-serif}
 <a class="fwa" id="wafab" href="#">WhatsApp</a>
 
 <script>
-const PHONE="918688475976";
+let PHONE="918688475976";
+const hx=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const P=[
 ["Rapicon Walls / Wall Partitions","Modern walling and partitions for efficient space division.","Walls"],
 ["Cement Wood Planks","Wood-look cement planks for cladding and feature walls.","Cladding"],
@@ -352,7 +353,7 @@ const PROJ={"Homes":[0,1,2,5,7],"Offices & shops":[5,3,0,6,2],"Industrial":[8,4,
 const $=id=>document.getElementById(id),sel=$("psel");
 const esc=s=>s.replace(/&/g,"&amp;");
 sel.innerHTML='<option value="">Not sure yet</option>'+P.map(p=>`<option>${esc(p[0])}</option>`).join("");
-function ask(name){sel.value=name;showTab(1);$("enquiry").scrollIntoView()}
+function ask(name){let o=[...sel.options].find(x=>x.value===name||x.text===name);if(!o){o=new Option(name,name);sel.add(o)}sel.value=name;showTab(1);$("enquiry").scrollIntoView()}
 /* product finder */
 const pj=Object.keys(PROJ);let cur=pj[0];
 function finder(){
@@ -364,13 +365,21 @@ $("chips").onclick=e=>{const b=e.target.closest("button");if(b){cur=b.textConten
 $("rec").onclick=e=>{const a=e.target.closest("a[data-p]");if(a){e.preventDefault();ask(P[a.dataset.p][0])}};
 finder();
 /* product grid with filter */
-const cats=["All",...new Set(P.map(p=>p[2]))];let fc="All";
+let L=P.map((p,i)=>({n:p[0],d:p[1],c:p[2],sw:"s"+(i+1),img:""}));
+let cats,fc="All";
+const setCats=()=>{cats=["All",...new Set(L.map(p=>p.c).filter(Boolean))]};setCats();
 function grid(){
- $("filters").innerHTML=cats.map(c=>`<button type="button" aria-pressed="${c===fc}">${c}</button>`).join("");
- $("pgrid").innerHTML=P.map((p,i)=>fc==="All"||p[2]===fc?`<article class="prod"><div class="sw s${i+1}"><i>${p[2]}</i></div><div class="b"><h3>${esc(p[0])}</h3><p>${p[1]}</p><a href="#enquiry" data-i="${i}">Enquire now →</a></div></article>`:"").join("");
+ $("filters").innerHTML=cats.map(c=>`<button type="button" aria-pressed="${c===fc}">${hx(c)}</button>`).join("");
+ $("pgrid").innerHTML=L.map((p,i)=>fc==="All"||p.c===fc?`<article class="prod"><div class="sw ${p.sw}">${p.img?`<img src="${hx(p.img)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">`:""}<i>${hx(p.c)}</i></div><div class="b"><h3>${hx(p.n)}</h3><p>${hx(p.d)}</p><a href="#enquiry" data-i="${i}">Enquire now →</a></div></article>`:"").join("");
 }
+/* called by cms-bridge.js when products are published in the Product admin */
+window.rrSetProducts=list=>{
+ L=list.map((p,i)=>({n:String(p.name||"Product"),d:String(p.description||""),c:String(p.category||"Products"),sw:"s"+((i%12)+1),img:Array.isArray(p.image_urls)&&/^https?:\/\//i.test(p.image_urls[0]||"")?p.image_urls[0]:""}));
+ fc="All";setCats();grid();
+ sel.innerHTML='<option value="">Not sure yet</option>'+L.map(p=>`<option>${hx(p.n)}</option>`).join("");
+};
 $("filters").onclick=e=>{const b=e.target.closest("button");if(b){fc=b.textContent;grid()}};
-$("pgrid").onclick=e=>{const a=e.target.closest("a[data-i]");if(a){e.preventDefault();ask(P[a.dataset.i][0])}};
+$("pgrid").onclick=e=>{const a=e.target.closest("a[data-i]");if(a){e.preventDefault();ask(L[a.dataset.i].n)}};
 grid();
 /* tabs */
 function showTab(n){[1,2].forEach(i=>{$("p"+i).hidden=i!==n;$("t"+i).setAttribute("aria-selected",i===n)})}
@@ -380,7 +389,9 @@ const nav=$("nav"),mb=$("menu");
 mb.onclick=()=>{const o=nav.classList.toggle("open");mb.setAttribute("aria-expanded",o)};
 nav.onclick=e=>{if(e.target.tagName==="A"){nav.classList.remove("open");mb.setAttribute("aria-expanded",false)}};
 $("yr").textContent=new Date().getFullYear();
-$("wafab").href=`https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Royal Roots, I would like to know more about your products.")}`;
+const setWa=()=>{$("wafab").href=`https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Royal Roots, I would like to know more about your products.")}`};setWa();
+/* called by cms-bridge.js when the phone/WhatsApp number is edited */
+window.rrSetPhone=p=>{if(/^\d{7,15}$/.test(p)){PHONE=p;setWa()}};
 /* forms */
 const f=$("f"),msg=$("msg");
 const data=()=>Object.fromEntries(new FormData(f).entries());
@@ -401,5 +412,7 @@ f.addEventListener("submit",async e=>{
  b.disabled=false;
 });
 </script>
+<script src="../supabase-config.js"></script>
+<script type="module" src="./cms-bridge.js"></script>
 </body>
 </html>
