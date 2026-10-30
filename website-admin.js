@@ -6,8 +6,10 @@ function msg(s,type=""){notice.textContent=s;notice.className=type;notice.hidden
 function view(on){login.hidden=on;dash.hidden=!on}
 async function allowed(u){const{data,error}=await sb.from("product_admins").select("user_id").eq("user_id",u.id).maybeSingle();if(error)throw error;return!!data}
 async function session(s){user=s?.user||null;if(!user){view(false);return}try{if(!await allowed(user)){await sb.auth.signOut();view(false);msg("This account is not authorized.","error");return}view(true);msg("Administrator access confirmed.","success");await loadSettings();await loadSections();await loadCards()}catch(e){view(false);msg(e.message||"Admin verification failed.","error")}}
-function switchTab(n){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===n));$("#tab-settings").hidden=n!=="settings";$("#tab-sections").hidden=n!=="sections";$("#tab-cards").hidden=n!=="cards";const v=$("#tab-videos");if(v)v.hidden=n!=="videos"}
+function switchTab(n){document.querySelectorAll(".tab").forEach(b=>{const active=b.dataset.tab===n;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});$("#tab-settings").hidden=n!=="settings";$("#tab-sections").hidden=n!=="sections";$("#tab-cards").hidden=n!=="cards";$("#tab-products").hidden=n!=="products";$("#tab-preview").hidden=n!=="preview";const v=$("#tab-videos");if(v)v.hidden=n!=="videos";if(n==="preview")refreshPreview()}
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+function refreshPreview(){const frame=$("#site-preview-frame");if(frame)frame.src="./index.html?admin-preview="+Date.now()}
+$("#refresh-preview")?.addEventListener("click",refreshPreview);
 
 function updateAdminMapPreview(){const address=$("#address")?.value.trim()||"2-24/1 Padam Nagar, Karimnagar, Telangana, India";const frame=$("#admin-map-preview");if(frame)frame.src="https://www.google.com/maps?q="+encodeURIComponent(address)+"&output=embed"}
 $("#address")?.addEventListener("input",updateAdminMapPreview);
