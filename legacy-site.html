@@ -335,16 +335,28 @@ document.getElementById("wa").onclick=()=>{if(valid())window.open(`https://wa.me
 document.getElementById("wafab").href=`https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Royal Roots, I would like to know more about your products.")}`;
 f.addEventListener("submit",async e=>{
  e.preventDefault();if(!valid())return;
- const d=data();if(d._honey)return;delete d._honey;
+ const d=data();
+ if(d._honey){msg.textContent="";return;}
  d._subject="New enquiry: "+(d.product||"General")+" - "+d.name;
- d._cc="Royalrootstrading@outlook.com";d._template="table";d._captcha="false";
- const b=document.getElementById("go");b.disabled=true;msg.className="";msg.textContent="Sending...";
+ d._cc="Royalrootstrading@outlook.com";
+ d._template="table";
+ d._url="https://royalrootstrading-hub.github.io/royal-roots-trading-co/";
+ if(d.email)d._replyto=d.email;
+ delete d._honey;
+ const b=document.getElementById("go");b.disabled=true;msg.className="";msg.textContent="Sending your enquiry...";
  try{
   const r=await fetch("https://formsubmit.co/ajax/Royalrootstrading@gmail.com",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(d)});
-  const j=await r.json();
-  if(r.ok&&String(j.success)==="true"){msg.className="ok";msg.textContent="Thank you. We have your enquiry and will reply soon.";f.reset()}
-  else throw new Error();
- }catch(_){msg.className="err";msg.textContent="Could not send. Please use the WhatsApp button or call 91 86884 75976."}
+  let j={};try{j=await r.json()}catch(_){}
+  if(r.ok&&String(j.success).toLowerCase()==="true"){
+   msg.className="ok";msg.textContent="Enquiry submitted successfully. Our team will contact you soon.";f.reset();
+  }else{
+   const reason=j.message||j.error||("Email service returned HTTP "+r.status+".");
+   throw new Error(reason);
+  }
+ }catch(err){
+  msg.className="err";
+  msg.textContent="Email could not be sent: "+(err&&err.message?err.message:"Please try again. You can also use WhatsApp or call 91 86884 75976.");
+ }
  b.disabled=false;
 });
 </script>
