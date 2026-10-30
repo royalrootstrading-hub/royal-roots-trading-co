@@ -63,6 +63,15 @@ nav a.btn{padding:10px 20px;font-size:15px;color:var(--deep)}
 @media(prefers-color-scheme:dark){.rec a{color:var(--gold2)}}
 .finder .btn{width:100%;text-align:center}
 @media(max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero{padding:48px 0 56px}}
+/* banner */
+.banner{background:#fff;border-bottom:3px solid var(--gold)}
+.banner img{display:block;width:100%;height:auto;max-width:1600px;margin:0 auto;aspect-ratio:16/9;object-fit:cover}
+/* map */
+.visit .head{margin-bottom:22px}
+.mapbox{position:relative;width:100%;aspect-ratio:16/7;min-height:300px;border-radius:12px;overflow:hidden;border:4px solid var(--gold);background:var(--card);box-shadow:0 18px 40px rgba(6,26,61,.2)}
+.mapbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.visit .cta{margin-top:18px}
+@media(max-width:700px){.mapbox{aspect-ratio:auto;height:320px;min-height:0}}
 /* stats */
 .stats{background:var(--blue);color:#fff}
 .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
@@ -193,6 +202,7 @@ footer strong{color:#fff;font-family:Archivo,sans-serif}
 </div></header>
 
 <main id="top">
+<div class="banner"><img src="banner.jpg" width="1600" height="900" alt="Royal Roots Trading &amp; Co. — authorized dealer for BirlaNu cement fibre boards and wall panels, Karimnagar"></div>
 <div class="hero"><div class="wrap">
 <div>
 <span class="dealer">Authorized dealer for Birla Aerocon</span>
@@ -286,6 +296,12 @@ footer strong{color:#fff;font-family:Archivo,sans-serif}
 <details><summary>What are your contact details?</summary><p>Call or WhatsApp Mohammad Zubair on +91 86884 75976, or email Royalrootstrading@gmail.com.</p></details>
 </div></div></section>
 
+<section class="visit" id="visit"><div class="wrap">
+<div class="head"><h2>Visit our shop</h2><p>2-24/1 Padam Nagar, Karimnagar, Telangana 505001. Call before you come and we will have your quotation ready.</p></div>
+<div class="mapbox"><iframe src="https://www.google.com/maps?q=18.441295,79.101263&amp;z=17&amp;output=embed" title="Royal Roots Trading &amp; Co. on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+<div class="cta"><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=18.441295,79.101263" target="_blank" rel="noopener">Get directions</a><a class="btn blue" href="https://www.google.com/maps/search/?api=1&amp;query=18.441295,79.101263" target="_blank" rel="noopener">Open in Google Maps</a></div>
+</div></section>
+
 <div class="follow"><div class="wrap"><div><h2>Watch and follow Royal Roots</h2><p>Product videos and project updates on our channels.</p></div><div class="social"><a href="https://www.youtube.com/@royalrootstradingco" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/royalroots_trading/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/profile.php?id=61595561580640" target="_blank" rel="noopener">Facebook</a></div></div></div>
 
 <section id="enquiry"><div class="wrap enq">
@@ -295,7 +311,7 @@ footer strong{color:#fff;font-family:Archivo,sans-serif}
 <p><strong>Mohammad Zubair</strong><br>Contact person</p>
 <p><a href="tel:+918688475976">+91 86884 75976</a><br>Phone / WhatsApp</p>
 <p><a href="mailto:Royalrootstrading@gmail.com">Royalrootstrading@gmail.com</a><br><a href="mailto:Royalrootstrading@outlook.com">Royalrootstrading@outlook.com</a></p>
-<p>2-24/1 Padam Nagar,<br>Karimnagar, Telangana, India</p>
+<p>2-24/1 Padam Nagar,<br>Karimnagar, Telangana, India<br><a href="#visit">See us on the map</a></p>
 </div>
 <div>
 <div class="tabs" role="tablist">
@@ -312,7 +328,7 @@ footer strong{color:#fff;font-family:Archivo,sans-serif}
 <label>Quantity or area<input name="quantity" placeholder="e.g. 1,200 sq ft"></label>
 <label class="full">Your requirement<textarea name="requirement" placeholder="Thickness, size, delivery date, anything else"></textarea></label>
 <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
-<div class="full" style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn" type="submit" id="go">Send enquiry</button><button class="btn wa" type="button" id="wa">Send on WhatsApp</button></div>
+<div class="full" style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn" type="submit" id="go">Send enquiry</button><button class="btn wa" type="button" id="wa">Send enquiry on WhatsApp</button><a class="btn wa" id="wa2" href="#" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
 <p id="msg" role="status"></p>
 </form>
 </div>
@@ -389,7 +405,7 @@ const nav=$("nav"),mb=$("menu");
 mb.onclick=()=>{const o=nav.classList.toggle("open");mb.setAttribute("aria-expanded",o)};
 nav.onclick=e=>{if(e.target.tagName==="A"){nav.classList.remove("open");mb.setAttribute("aria-expanded",false)}};
 $("yr").textContent=new Date().getFullYear();
-const setWa=()=>{$("wafab").href=`https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Royal Roots, I would like to know more about your products.")}`};setWa();
+const setWa=()=>{const u=`https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Royal Roots, I would like to know more about your products.")}`;$("wafab").href=u;$("wa2").href=u};setWa();
 /* called by cms-bridge.js when the phone/WhatsApp number is edited */
 window.rrSetPhone=p=>{if(/^\d{7,15}$/.test(p)){PHONE=p;setWa()}};
 /* forms */
