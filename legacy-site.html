@@ -252,15 +252,26 @@ document.getElementById("wafab").href=`https://wa.me/${PHONE}?text=${encodeURICo
 f.addEventListener("submit",async e=>{
  e.preventDefault();if(!valid())return;
  const d=data();if(d._honey)return;delete d._honey;
- d._subject="New enquiry: "+(d.product||"General")+" - "+d.name;
- d._cc="Royalrootstrading@outlook.com";d._template="table";d._captcha="false";
- const b=document.getElementById("go");b.disabled=true;msg.className="";msg.textContent="Sending...";
+ const subject="New enquiry: "+(d.product||"General")+" - "+d.name;
+ const body=text(d)+"\nEmail: "+(d.email||"-");
+ const mailto="mailto:royalrootstrading@gmail.com,royalrootstrading@outlook.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+ const payload={...d,_subject:subject,_cc:"royalrootstrading@outlook.com",_template:"table",_captcha:"false"};
+ const b=document.getElementById("go");b.disabled=true;msg.className="";msg.textContent="Sending enquiry...";
  try{
-  const r=await fetch("https://formsubmit.co/ajax/Royalrootstrading@gmail.com",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(d)});
-  const j=await r.json();
-  if(r.ok&&String(j.success)==="true"){msg.className="ok";msg.textContent="Thank you. We have your enquiry and will reply soon.";f.reset()}
-  else throw new Error();
- }catch(_){msg.className="err";msg.textContent="Could not send. Please use the WhatsApp button or call 91 86884 75976."}
+  const r=await fetch("https://formsubmit.co/ajax/royalrootstrading@gmail.com",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(payload)});
+  const raw=await r.text();let j={};try{j=JSON.parse(raw)}catch(_){}
+  if(r.ok&&String(j.success).toLowerCase()==="true"){
+   msg.className="ok";msg.textContent="Your enquiry was accepted by the email service. We will reply soon.";f.reset();
+  }else{
+   const reason=j.message||j.error||("Email service returned HTTP "+r.status);
+   msg.className="err";msg.replaceChildren(document.createTextNode("Email service could not accept the enquiry ("+reason+"). It has not been sent automatically. "));
+   const a=document.createElement("a");a.href=mailto;a.textContent="Open email draft";a.style.fontWeight="700";a.style.textDecoration="underline";msg.appendChild(a);
+  }
+ }catch(err){
+  msg.className="err";msg.replaceChildren(document.createTextNode("Could not connect to the email service. Your enquiry has not been sent. "));
+  const a=document.createElement("a");a.href=mailto;a.textContent="Open email draft";a.style.fontWeight="700";a.style.textDecoration="underline";msg.appendChild(a);
+  msg.appendChild(document.createTextNode(" or use the WhatsApp button."));
+ }
  b.disabled=false;
 });
 </script>
