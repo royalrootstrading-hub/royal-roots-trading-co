@@ -199,7 +199,7 @@ footer strong{color:#fff;font-family:"Bricolage Grotesque",sans-serif}
 <div class="social" style="color:var(--blue)"><a href="https://www.youtube.com/@royalrootstradingco" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/royalroots_trading/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/profile.php?id=61595561580640" target="_blank" rel="noopener">Facebook</a></div>
 </div>
 <div class="enquiry-actions" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px"><a class="btn" href="#f" style="background:var(--blue);color:#fff;border:2px solid var(--blue);border-radius:999px;padding:9px 18px">Quick enquiry</a><a class="btn" href="https://forms.gle/2yjZYEBhq3scwtyv5" target="_blank" rel="noopener noreferrer" style="background:transparent;color:var(--blue);border:1.5px solid var(--blue);border-radius:999px;padding:9px 18px">Google Form</a><a class="btn" href="https://wa.me/917799187189?text=Hello%20Royal%20Roots%2C%20I%20would%20like%20a%20quotation." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp enquiry to 7799187189" style="background:#1faa59;color:#fff;border:2px solid #1faa59;border-radius:999px;padding:9px 18px">WhatsApp: 7799187189</a><a class="btn" href="https://wa.me/918688475976?text=Hello%20Royal%20Roots%2C%20I%20would%20like%20a%20quotation." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp enquiry to 8688475976" style="background:transparent;color:#168344;border:2px solid #1faa59;border-radius:999px;padding:9px 18px">WhatsApp: 8688475976</a></div>
-<form id="f" action="https://formsubmit.co/royalrootstrading@gmail.com" method="POST">
+<form id="f">
 <label>Your name *<input name="name" required autocomplete="name"></label>
 <label>Phone / WhatsApp *<input name="phone" type="tel" required autocomplete="tel"></label>
 <label>Email<input name="email" type="email" autocomplete="email"></label>
@@ -208,10 +208,10 @@ footer strong{color:#fff;font-family:"Bricolage Grotesque",sans-serif}
 <label>Quantity or area<input name="quantity" placeholder="e.g. 1,200 sq ft"></label>
 <label class="full">Your requirement<textarea name="requirement" placeholder="Thickness, size, delivery date, anything else"></textarea></label>
 <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
-<input type="hidden" name="_cc" value="royalrootstrading@outlook.com">
-<input type="hidden" name="_subject" value="New Royal Roots website enquiry">
-<input type="hidden" name="_template" value="table">
-<input type="hidden" name="_captcha" value="false">
+
+
+
+
 <div class="full" style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn" type="submit" id="go">Send enquiry</button><button class="btn" type="button" id="wa" style="background:#1faa59;color:#fff">Send on WhatsApp</button></div>
 <p id="msg" role="status"></p>
 </form>
@@ -253,8 +253,27 @@ function valid(){const d=data();if(!d.name.trim()||!d.phone.trim()||!d.location.
 function text(d){return`Hello Royal Roots, I need a quotation.\nName: ${d.name}\nPhone: ${d.phone}\nLocation: ${d.location}\nProduct: ${d.product||"Not sure yet"}\nQuantity/area: ${d.quantity||"-"}\nRequirement: ${d.requirement||"-"}`}
 document.getElementById("wa").onclick=()=>{if(valid())window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(text(data()))}`,"_blank")};
 document.getElementById("wafab").href=`https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Royal Roots, I would like to know more about your products.")}`;
-// Enquiry form uses a normal HTML POST to FormSubmit (not cross-origin AJAX).
-// This avoids browser CORS/fetch failures; FormSubmit may ask the recipient to activate first.
+// Send the enquiry through the Supabase Edge Function.
+f.addEventListener("submit",async(event)=>{
+ event.preventDefault();
+ if(!valid())return;
+ const button=document.getElementById("go");
+ const d=data();
+ button.disabled=true;button.textContent="Sending...";
+ msg.className="";msg.style.color="#334155";msg.textContent="Sending your enquiry securely...";
+ try{
+  const response=await fetch("https://rdplhwytedjphuczcvrf.supabase.co/functions/v1/website-enquiry",{
+   method:"POST",headers:{"Content-Type":"application/json"},
+   body:JSON.stringify(d)
+  });
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok||!result.ok)throw new Error(result.error||"Your enquiry could not be sent. Please try WhatsApp or call us.");
+  msg.className="";msg.style.color="#168344";msg.textContent="Thank you. Your enquiry has been sent successfully.";
+  f.reset();
+ }catch(error){
+  msg.className="err";msg.textContent=error.message||"Could not send your enquiry. Please try WhatsApp or call us.";
+ }finally{button.disabled=false;button.textContent="Send enquiry"}
+});
 
 </script>
 </body>
