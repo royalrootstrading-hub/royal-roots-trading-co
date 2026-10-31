@@ -1,6 +1,0 @@
-# Files that stay in the repo but are not published on Cloudflare
-.git
-.assetsignore
-wrangler.jsonc
-*.md
-supabase
