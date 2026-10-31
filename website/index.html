@@ -192,6 +192,13 @@ footer strong{color:#fff;font-family:Archivo,sans-serif}
 @media(max-width:700px){.fcall{display:block}}
 @media(prefers-reduced-motion:no-preference){.hero .wrap>div:first-child>*{animation:up .7s both}.hero .wrap>div:first-child>*:nth-child(2){animation-delay:.1s}.hero .wrap>div:first-child>*:nth-child(3){animation-delay:.2s}.hero .wrap>div:first-child>*:nth-child(4){animation-delay:.3s}@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.prod{transition:none}}
+.callsheet{position:fixed;inset:0;z-index:80;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.callsheet.open{display:flex}
+.callsheet div{width:100%;max-width:420px;margin:0 12px calc(12px + env(safe-area-inset-bottom,0px));background:#0d1b2e;border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:16px;display:grid;gap:10px}
+.callsheet h3{margin:0 0 4px;font:700 16px Archivo,sans-serif;text-align:center}
+.callsheet a,.callsheet button{display:block;text-align:center;padding:14px;border-radius:99px;font:700 16px Archivo,sans-serif;text-decoration:none;border:0;cursor:pointer}
+.callsheet a{background:var(--gold);color:var(--deep)}
+.callsheet button{background:#26364b;color:#fff}
 </style>
 </head>
 <body>
@@ -347,6 +354,7 @@ footer strong{color:#fff;font-family:Archivo,sans-serif}
 <div>© <span id="yr"></span> Royal Roots Trading &amp; Co.<br>Authorized dealer for Birla Aerocon</div>
 </div></footer>
 <a class="fcall" href="tel:+918688475976">Call</a>
+<div class="callsheet" id="callsheet" role="dialog" aria-label="Choose a number to call"><div id="callopts"></div></div>
 <a class="fwa" id="wafab" href="#">WhatsApp</a>
 
 <script>
@@ -408,6 +416,19 @@ $("yr").textContent=new Date().getFullYear();
 const setWa=()=>{const u=`https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Royal Roots, I would like to know more about your products.")}`;$("wafab").href=u;$("wa2").href=u};setWa();
 /* called by cms-bridge.js when the phone/WhatsApp number is edited */
 window.rrSetPhone=p=>{if(/^\d{7,15}$/.test(p)){PHONE=p;setWa()}};
+/* several call numbers: the Call button lets the visitor pick one */
+let PHONES=[];
+const showNum=n=>n.length===12&&n.startsWith("91")?"+91 "+n.slice(2,7)+" "+n.slice(7):"+"+n;
+window.rrSetPhones=l=>{PHONES=(l||[]).filter(n=>/^\d{7,15}$/.test(n))};
+const sheet=$("callsheet"),opts=$("callopts");
+document.querySelector(".fcall").addEventListener("click",e=>{
+ if(PHONES.length<2)return;
+ e.preventDefault();opts.replaceChildren();
+ const t=document.createElement("h3");t.textContent="Choose a number to call";opts.append(t);
+ PHONES.forEach(n=>{const a=document.createElement("a");a.href="tel:+"+n;a.textContent="Call "+showNum(n);opts.append(a)});
+ const c=document.createElement("button");c.type="button";c.textContent="Cancel";c.onclick=()=>sheet.classList.remove("open");opts.append(c);
+ sheet.classList.add("open")});
+sheet.addEventListener("click",e=>{if(e.target===sheet)sheet.classList.remove("open")});
 /* forms */
 const f=$("f"),msg=$("msg");
 const data=()=>Object.fromEntries(new FormData(f).entries());
