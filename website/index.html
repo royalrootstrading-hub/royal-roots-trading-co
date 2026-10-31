@@ -398,6 +398,12 @@ function grid(){
 }
 /* called by cms-bridge.js when products are published in the Product admin */
 const BASE=L.slice();
+/* pictures from the gallery cards in the website admin (matched to products by name) */
+const nk=s=>String(s||"").toLowerCase().replace(/[^a-z0-9×]+/g,"");
+window.rrSetCardImages=list=>{
+ list.forEach(g=>{const k=nk(g.t);if(!k)return;
+  [BASE,L].forEach(arr=>arr.forEach(p=>{const pk=nk(p.n);if(pk===k||(k.startsWith("rapicon")&&pk.startsWith("rapicon")))p.img=g.u}))});
+ grid()};
 window.rrSetProducts=list=>{
  /* keep the 12 built-in products and add the ones published in the Product admin (same name = update that card) */
  const key=s=>String(s||"").trim().toLowerCase();
