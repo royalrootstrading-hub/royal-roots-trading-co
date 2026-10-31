@@ -78,6 +78,8 @@ export function applyCms(d,data){
  const soc={youtube:s.social_youtube_url,instagram:s.social_instagram_url,facebook:s.social_facebook_url};
  qa(".follow .social a").forEach(a=>{const k=a.textContent.trim().toLowerCase();if(isHttp(soc[k]))a.href=soc[k].trim()});
  if(s.social_links_visible===false){const f=q(".follow");if(f)f.hidden=true}
+ /* top announcement bar (gold) */
+ {const a=q("#announce");if(a){if(txt(s.announcement_text)){a.textContent=s.announcement_text.trim();a.hidden=false}else a.hidden=true}}
  /* contact details */
  const phone=txt(s.contact_phone)||txt(s.whatsapp);
  if(phone){
