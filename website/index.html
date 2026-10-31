@@ -389,9 +389,17 @@ function grid(){
  $("pgrid").innerHTML=L.map((p,i)=>fc==="All"||p.c===fc?`<article class="prod"><div class="sw ${p.sw}">${p.img?`<img src="${hx(p.img)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">`:""}<i>${hx(p.c)}</i></div><div class="b"><h3>${hx(p.n)}</h3><p>${hx(p.d)}</p><a href="#enquiry" data-i="${i}">Enquire now →</a></div></article>`:"").join("");
 }
 /* called by cms-bridge.js when products are published in the Product admin */
+const BASE=L.slice();
 window.rrSetProducts=list=>{
- L=list.map((p,i)=>({n:String(p.name||"Product"),d:String(p.description||""),c:String(p.category||"Products"),sw:"s"+((i%12)+1),img:Array.isArray(p.image_urls)&&/^https?:\/\//i.test(p.image_urls[0]||"")?p.image_urls[0]:""}));
- fc="All";setCats();grid();
+ /* keep the 12 built-in products and add the ones published in the Product admin (same name = update that card) */
+ const key=s=>String(s||"").trim().toLowerCase();
+ const out=BASE.map(b=>({...b}));
+ list.slice().reverse().forEach(p=>{
+  const item={n:String(p.name||"Product"),d:String(p.description||""),c:String(p.category||"Products"),img:Array.isArray(p.image_urls)&&/^https?:\/\//i.test(p.image_urls[0]||"")?p.image_urls[0]:""};
+  const i=out.findIndex(x=>key(x.n)===key(item.n));
+  if(i>=0){const o=out[i];out[i]={n:o.n,d:item.d||o.d,c:item.c&&item.c!=="Products"?item.c:o.c,sw:o.sw,img:item.img||o.img}}
+  else out.push({...item,sw:"s"+((out.length%12)+1)})});
+ L=out;fc="All";setCats();grid();
  sel.innerHTML='<option value="">Not sure yet</option>'+L.map(p=>`<option>${hx(p.n)}</option>`).join("");
 };
 $("filters").onclick=e=>{const b=e.target.closest("button");if(b){fc=b.textContent;grid()}};
