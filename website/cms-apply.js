@@ -101,7 +101,7 @@ export function applyCms(d,data){
    const label=nums.map(show).join(" / ");
    const w=d.createTreeWalker(d.body,4);let n;while((n=w.nextNode())){if(n.parentElement&&!n.parentElement.closest("#rr-cms-content")&&!/^(SCRIPT|STYLE)$/.test(n.parentElement.tagName)&&n.nodeValue.includes(OLD.phone))n.nodeValue=n.nodeValue.split(OLD.phone).join(label)}}}
  if(txt(s.contact_email)&&/^[^\s@]+@[^\s@]+$/.test(s.contact_email.trim())){const e=s.contact_email.trim();qa('a[href^="mailto:"]').filter(a=>!a.closest("#rr-cms-content")).forEach(a=>{if(a.textContent.trim().toLowerCase()===OLD.email.toLowerCase()){a.href="mailto:"+e;a.textContent=e}});const w=d.createTreeWalker(d.body,4);let n;while((n=w.nextNode())){if(n.parentElement&&!n.parentElement.closest("#rr-cms-content")&&!/^(SCRIPT|STYLE|A)$/.test(n.parentElement.tagName)&&n.nodeValue.includes(OLD.email))n.nodeValue=n.nodeValue.split(OLD.email).join(e)}}
- if(txt(s.address)){const p=qa("#contact p").find(x=>x.textContent.includes("Padam Nagar"));if(p){p.replaceChildren();s.address.trim().split(/\r?\n/).forEach((line,i)=>{if(i)p.append(d.createElement("br"));p.append(d.createTextNode(line))})}}
+ if(txt(s.address)){const p=qa("#contact p").find(x=>x.textContent.includes("Padma Nagar")||x.textContent.includes("Padam Nagar"));if(p){p.replaceChildren();s.address.trim().split(/\r?\n/).forEach((line,i)=>{if(i)p.append(d.createElement("br"));p.append(d.createTextNode(line))})}}
  /* pictures set on the gallery cards in the website admin */
  const gal=cards.filter(c=>c.group_key==="gallery"&&c.visible!==false&&isHttp(c.image_url));
  if(gal.length)d.defaultView?.rrSetCardImages?.(gal.map(c=>({t:String(c.title||""),u:c.image_url.trim()})));
